@@ -1,0 +1,12 @@
+public interface Servicio {
+    List<Solicitud> obtenerSolicitudes();
+
+    Solicitud obtenerSolicitudPorId(Long id);
+
+    void registrarSolicitud(Solicitud solicitud);
+    void registrarSolicitud();
+
+    void actualizarSolicitud(Solicitud solicitud);
+
+    void eliminarSolicitud(Long id);  
+}
