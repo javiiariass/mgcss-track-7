@@ -25,10 +25,10 @@ replay_pid*
 
 
 # archivos requeridos por el proyecto
-/ target ,
-. class ,
-. idea,
-. vscode
+/target
+.class
+.idea
+.vscode
 
 # Spring boot
 HELP.md
