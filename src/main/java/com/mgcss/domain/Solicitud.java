@@ -1,14 +1,18 @@
 package com.mgcss.domain;
+import java.util.Date;
 
 public class Solicitud {
     private Long id;
-    private enum estado{ABIERTA, EN_PROCESO, CERRADA};
+    private enum estados{ABIERTA, EN_PROCESO, CERRADA};
     private Cliente cliente;
     private String descripcion;
     private Tecnico tecnicoAsignado;
     private Date fechaCreacion;
     private Date fechaCierre = null;// Todo cambiar a null @Column(nullable = true)
+    private estados estado;
 
+    public Solicitud() {
+    }
     
     public Solicitud(Long id, Cliente cliente, String descripcion, Tecnico tecnicoAsignado) {
         this.id = id;
@@ -16,6 +20,7 @@ public class Solicitud {
         this.descripcion = descripcion;
         this.tecnicoAsignado = tecnicoAsignado;
         this.fechaCreacion = new Date();
+        this.estado = estados.ABIERTA;
     }
 
     public Long getId() {
@@ -64,5 +69,13 @@ public class Solicitud {
 
     public void setFechaCierre(Date fechaCierre) {
         this.fechaCierre = fechaCierre;
+    }
+
+    public estados getEstado() {
+        return estado;
+    }
+
+    public void setEstado(estados estado) {
+        this.estado = estado;
     }
 }
