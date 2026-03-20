@@ -20,8 +20,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Compilar proyecto
-        run: mvn clean compile
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn clean -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=javiiariass_mgcss-track-7
 
       - name: Ejecutar tests
         run: mvn test
