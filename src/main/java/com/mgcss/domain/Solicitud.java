@@ -12,6 +12,8 @@ public class Solicitud {
     private estados estado;
 
     public Solicitud() {
+        // TEST constructor vacío no debería tener esto
+        this.estado = estados.ABIERTA;
     }
     
     public Solicitud(Long id, Cliente cliente, String descripcion, Tecnico tecnicoAsignado) {
@@ -79,8 +81,14 @@ public class Solicitud {
         this.estado = estado;
     }
 
-    public boolean solicitudAbierta(){
-        return this.estado == estados.EN_PROCESO;
+    public boolean cerrarSolicitud(){
+        if (this.estado == estados.ABIERTA)
+            return false;
+        
+        this.estado = estados.CERRADA;
+        return true;
     }
+
+
 }
 

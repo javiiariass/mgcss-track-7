@@ -13,9 +13,7 @@ import com.mgcss.domain.Solicitud;
 @SpringBootTest
 class ApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+	
 
 	@Test
 	void dominioTest() {
@@ -33,6 +31,17 @@ class ApplicationTests {
 		assertEquals("Problema PC", solicitud.getDescripcion());
 		assertNotNull(solicitud.getFechaCreacion());
 		assertEquals(cliente, solicitud.getCliente());
+	}
+	@Test
+	void cerrarSolicitud_no_En_proceso() {
+		// Preparar
+		Solicitud solicitud = new Solicitud();
+		
+		boolean resultado = solicitud.cerrarSolicitud();
+		System.out.println("**************************************" + resultado);
+		// Comprobar
+		assertEquals(true, resultado);
+		
 	}
 
 }
