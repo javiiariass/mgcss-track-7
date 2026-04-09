@@ -78,4 +78,9 @@ public class Solicitud {
     public void setEstado(estados estado) {
         this.estado = estado;
     }
+
+    public boolean solicitudAbierta(){
+        return this.estado == estados.EN_PROCESO;
+    }
 }
+
