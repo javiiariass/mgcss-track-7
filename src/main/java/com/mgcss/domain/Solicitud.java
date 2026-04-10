@@ -1,19 +1,26 @@
 package com.mgcss.domain;
 import java.util.Date;
 
+
+
 public class Solicitud {
+    public enum estadoSolicitudes{ABIERTA, EN_PROCESO, CERRADA}
+
     private Long id;
-    private enum estados{ABIERTA, EN_PROCESO, CERRADA};
+   
     private Cliente cliente;
     private String descripcion;
     private Tecnico tecnicoAsignado;
     private Date fechaCreacion;
     private Date fechaCierre = null;// Todo cambiar a null @Column(nullable = true)
-    private estados estado;
+   
+
+    private estadoSolicitudes estado;
+
 
     public Solicitud() {
         // TEST constructor vacío no debería tener esto
-        this.estado = estados.ABIERTA;
+        this.estado = estadoSolicitudes.ABIERTA;
     }
     
     public Solicitud(Long id, Cliente cliente, String descripcion, Tecnico tecnicoAsignado) {
@@ -22,7 +29,10 @@ public class Solicitud {
         this.descripcion = descripcion;
         this.tecnicoAsignado = tecnicoAsignado;
         this.fechaCreacion = new Date();
-        this.estado = estados.ABIERTA;
+        this.estado = estadoSolicitudes.ABIERTA;
+    }
+    public estadoSolicitudes getEstado() {
+        return estado; 
     }
 
     public Long getId() {
@@ -73,21 +83,20 @@ public class Solicitud {
         this.fechaCierre = fechaCierre;
     }
 
-    public estados getEstado() {
-        return estado;
-    }
 
-    public void setEstado(estados estado) {
+
+    public void setEstado(estadoSolicitudes estado) {
         this.estado = estado;
     }
 
     public boolean cerrarSolicitud(){
-        if (this.estado == estados.ABIERTA)
+        if (this.estado == estadoSolicitudes.ABIERTA)
             return false;
         
-        this.estado = estados.CERRADA;
+        this.estado = estadoSolicitudes.CERRADA;
         return true;
     }
+    
 
 
 }

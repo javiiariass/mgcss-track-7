@@ -40,8 +40,17 @@ class ApplicationTests {
 		boolean resultado = solicitud.cerrarSolicitud();
 		System.out.println("**************************************" + resultado);
 		// Comprobar
-		assertEquals(true, resultado);
-		
+		assertEquals(false, resultado);
 	}
-
+	@Test
+	void cerrarSolicitud_En_proceso() {
+		// Preparar
+		Solicitud solicitud = new Solicitud();
+		solicitud.setEstado(Solicitud.estadoSolicitudes.EN_PROCESO);
+		
+		boolean resultado = solicitud.cerrarSolicitud();
+		System.out.println("**************************************" + resultado);
+		// Comprobar
+		assertEquals(true, resultado);
+	}
 }
