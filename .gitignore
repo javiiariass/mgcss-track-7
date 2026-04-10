@@ -1,3 +1,6 @@
+# Archivos pdf
+*.pdf 
+
 # Compiled class file
 *.class
 
