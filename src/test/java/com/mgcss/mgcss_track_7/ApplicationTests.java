@@ -24,7 +24,7 @@ class ApplicationTests {
 		assertEquals(1L, cliente.getId());
 		assertEquals("Paco", cliente.getNombre());
 
-		Tecnico tecnico = new Tecnico(1L, "María", "Hardware", true);
+		Tecnico tecnico = new Tecnico(1L, "María", "Hardware");
 		assertEquals("María", tecnico.getNombre());
 
 		Solicitud solicitud = new Solicitud(1L, cliente, "Problema PC", tecnico);
@@ -52,5 +52,36 @@ class ApplicationTests {
 		System.out.println("**************************************" + resultado);
 		// Comprobar
 		assertEquals(true, resultado);
+	}
+	@Test
+	void asignarTecnico_NoActivo_y_Activo(){
+		Solicitud solicitud = new Solicitud();
+		Tecnico tecnicoActivo=new Tecnico();
+		assertEquals(false, solicitud.asignarTecnico(tecnicoActivo));
+		tecnicoActivo.setActivo(true);
+		assertEquals(true, solicitud.asignarTecnico(tecnicoActivo));
+	}
+
+	@Test
+	void asignarTecnico_Activo_Ya_Asignado(){
+		Solicitud solicitud = new Solicitud();
+		Tecnico tecnico1=new Tecnico();
+		Tecnico tecnico2 = new Tecnico();
+		tecnico1.setActivo(true);
+		tecnico2.setActivo(true);
+		solicitud.asignarTecnico(tecnico2);
+		assertEquals(false, solicitud.asignarTecnico(tecnico1));
+		System.out.println("***************************************************************************************************");
+	}
+
+	@Test
+	void asignarTecnico_Doble_Solicitud(){
+		Solicitud solicitud = new Solicitud();
+		Solicitud solicitud2 = new Solicitud();
+		Tecnico tecnicoActivo=new Tecnico();
+		tecnicoActivo.setActivo(true);
+		solicitud.asignarTecnico(tecnicoActivo);
+		assertEquals(false, solicitud2.asignarTecnico(tecnicoActivo));
+		System.out.println("***************************************************************************************************");
 	}
 }

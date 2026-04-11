@@ -5,13 +5,17 @@ public class Tecnico {
     private Long id;
     private String nombre;
     private String especialidad;
-    private Boolean activo;
+    private boolean activo = false;
+    private Solicitud solicitud;
 
-    public Tecnico(Long id, String nombre, String especialidad, Boolean activo) {
+    public Tecnico(){
+        this.solicitud=null;
+    }
+
+    public Tecnico(Long id, String nombre, String especialidad) {
         this.id = id;
         this.nombre = nombre;
         this.especialidad = especialidad;
-        this.activo = activo;
     }
 
     public Long getId() {
@@ -38,11 +42,22 @@ public class Tecnico {
         this.especialidad = especialidad;
     }
 
-    public Boolean getActivo() {
+    public boolean getActivo() {
         return activo;
     }
 
-    public void setActivo(Boolean activo) {
+    public void setActivo(boolean activo) {
         this.activo = activo;
     }
+
+    public Solicitud getSolicitud() {
+        return solicitud;
+    }
+
+    public void setSolicitud(Solicitud solicitud) {
+        this.solicitud = solicitud;
+    }
+
+    
+
 }
