@@ -56,21 +56,21 @@ class ApplicationTests {
 	@Test
 	void asignarTecnico_NoActivo_y_Activo(){
 		Solicitud solicitud = new Solicitud();
-		Tecnico t_activo=new Tecnico();
-		assertEquals(solicitud.asignarTecnico(t_activo), false);
-		t_activo.setActivo(true);
-		assertEquals(solicitud.asignarTecnico(t_activo), true);
+		Tecnico tecnicoActivo=new Tecnico();
+		assertEquals(false, solicitud.asignarTecnico(tecnicoActivo));
+		tecnicoActivo.setActivo(true);
+		assertEquals(true, solicitud.asignarTecnico(tecnicoActivo));
 	}
 
 	@Test
 	void asignarTecnico_Activo_Ya_Asignado(){
 		Solicitud solicitud = new Solicitud();
-		Tecnico t_activo=new Tecnico();
-		Tecnico t_buffer = new Tecnico();
-		t_activo.setActivo(true);
-		t_buffer.setActivo(true);
-		solicitud.asignarTecnico(t_buffer);
-		assertEquals(solicitud.asignarTecnico(t_activo), false);
+		Tecnico tecnico1=new Tecnico();
+		Tecnico tecnico2 = new Tecnico();
+		tecnico1.setActivo(true);
+		tecnico2.setActivo(true);
+		solicitud.asignarTecnico(tecnico2);
+		assertEquals(false, solicitud.asignarTecnico(tecnico1));
 		System.out.println("***************************************************************************************************");
 	}
 
@@ -78,10 +78,10 @@ class ApplicationTests {
 	void asignarTecnico_Doble_Solicitud(){
 		Solicitud solicitud = new Solicitud();
 		Solicitud solicitud2 = new Solicitud();
-		Tecnico t_activo=new Tecnico();
-		t_activo.setActivo(true);
-		solicitud.asignarTecnico(t_activo);
-		assertEquals(solicitud2.asignarTecnico(t_activo), false);
+		Tecnico tecnicoActivo=new Tecnico();
+		tecnicoActivo.setActivo(true);
+		solicitud.asignarTecnico(tecnicoActivo);
+		assertEquals(false, solicitud2.asignarTecnico(tecnicoActivo));
 		System.out.println("***************************************************************************************************");
 	}
 }
