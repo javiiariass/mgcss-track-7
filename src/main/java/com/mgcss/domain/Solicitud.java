@@ -97,7 +97,7 @@ public class Solicitud {
 
     public Boolean asignarTecnico(Tecnico tecnico) {
         boolean asignado = false;
-        if (tecnico.getActivo() && tecnico.getSolicitud() == null && tecnicoAsignado == null) {
+        if (tecnico.getActivo() == true && tecnico.getSolicitud() == null && tecnicoAsignado == null) {
             this.tecnicoAsignado = tecnico;
             tecnico.setSolicitud(this);
             asignado = true;
