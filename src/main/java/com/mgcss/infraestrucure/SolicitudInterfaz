@@ -1,0 +1,14 @@
+package com.mgcss.service;
+
+import com.mgcss.domain.Cliente;
+import java.util.List;
+
+
+public interface ServicioCliente {
+    
+    List<Cliente> listarClientes();
+    Cliente save(Cliente nuevoCliente);
+    CLiente consultarCliente(Long id);
+}
+
+
