@@ -84,4 +84,8 @@ class ApplicationTests {
 		assertEquals(false, solicitud2.asignarTecnico(tecnicoActivo));
 		System.out.println("***************************************************************************************************");
 	}
+
+	
+
+
 }

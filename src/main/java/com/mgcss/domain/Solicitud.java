@@ -1,5 +1,6 @@
 package com.mgcss.domain;
 
+import com.mgcss.service.SolicitudService;
 import java.util.Date;
 
 public class Solicitud {
@@ -29,6 +30,12 @@ public class Solicitud {
         this.tecnicoAsignado = tecnicoAsignado;
         this.fechaCreacion = new Date();
         this.estado = estadoSolicitudes.ABIERTA;
+    }
+
+    public Solicitud(Solicitud SolicitudCopia) {
+        // llamada a ctor
+        this(SolicitudCopia.getId(), SolicitudCopia.getCliente(), SolicitudCopia.getDescripcion(),
+                SolicitudCopia.getTecnicoAsignado());
     }
 
     public estadoSolicitudes getEstado() {
@@ -97,7 +104,7 @@ public class Solicitud {
 
     public boolean asignarTecnico(Tecnico tecnico) {
         boolean asignado = false;
-        
+
         if (tecnico.getActivo() && tecnico.getSolicitud() == null && tecnicoAsignado == null) {
             this.tecnicoAsignado = tecnico;
             tecnico.setSolicitud(this);
@@ -105,6 +112,27 @@ public class Solicitud {
         }
 
         return asignado;
+    }
+
+
+    public void cambiarEstado() {
+        // this.estado = this.estado.valueOf( this.estado.ordinal() + 1 % 3);
+        
+        switch (estado) {
+            case ABIERTA:
+                this.estado = estadoSolicitudes.EN_PROCESO;
+                break;
+            case EN_PROCESO:
+                this.estado = estadoSolicitudes.CERRADA;
+                break;
+                case CERRADA:
+                    // TODO Mantener lógica? o que se pueda abrir ?  
+                    //     this.estado = estadoSolicitudes.ABIERTA;
+                break;
+            default:
+                this.estado = estadoSolicitudes.ABIERTA;
+                break;
+        }
     }
 
 }
