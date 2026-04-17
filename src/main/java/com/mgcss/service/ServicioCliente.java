@@ -2,9 +2,10 @@ package com.mgcss.service;
 
 import com.mgcss.domain.Cliente;
 import java.util.List;
+import com.mgcss.infraestrucure.ClienteInterfaz;
 
-public class ServicioCliente {
-    private List<Cliente> clientes = new List<>();
+public class ServicioCliente  implements ClienteInterfaz {
+   /* private List<Cliente> clientes = new List<>();
     private long proximoId = 0;
     
     public List<Cliente> listarClientes() {
@@ -35,6 +36,6 @@ public class ServicioCliente {
         }
         return clienteCambiado;
     }
-
+ */
 
 }

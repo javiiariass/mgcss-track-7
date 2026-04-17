@@ -87,13 +87,7 @@ public class Solicitud {
         this.estado = estado;
     }
 
-    public boolean cerrarSolicitud() {
-        if (this.estado == estadoSolicitudes.ABIERTA)
-            return false;
-
-        this.estado = estadoSolicitudes.CERRADA;
-        return true;
-    }
+  
 
     public boolean asignarTecnico(Tecnico tecnico) {
         boolean asignado = false;

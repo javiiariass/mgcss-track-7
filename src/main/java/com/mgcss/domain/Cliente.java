@@ -14,6 +14,13 @@ public class Cliente{
 
     public Cliente() {
     }
+    
+    public Cliente(String nombre, String email, tipoCliente tipo) {
+        this.nombre = nombre;
+        this.email = email;
+        this.tipo = tipo;
+    }
+
     public Long getId() {
         return id;
     }
@@ -38,20 +45,13 @@ public class Cliente{
     public void setTipo(tipoCliente tipo) {
         this.tipo = tipo;
     }
-
-    public void crearCliente(Cliente nuevoCliente){
+/*
+    public Cliente crearCliente(Cliente nuevoCliente){
+        Cliente cliente = new Cliente(nuevoCliente.getNombre(),
+         nuevoCliente.getEmail(), nuevoCliente.getTipo());
+        return cliente;
 
     }
+         */
 
-    public void  ModificarCliente(Cliente cliente){
-
-    }
-
-    public List<Cliente> listarClientes(){
-        return null;
-    }
-
-    public Cliente consultarCliente(Long id){
-        return null;
-    }   
 }
