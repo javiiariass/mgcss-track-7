@@ -12,7 +12,7 @@ import com.mgcss.domain.Tecnico;
 import com.mgcss.domain.Solicitud;
 
 @SpringBootTest
-class ApplicationTests {
+class TecnicoTest {
 
 
 	@Test

@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.mgcss.domain.Cliente;
 
 @SpringBootTest
-class ApplicationTests {
+class ClienteTest {
 	/**************************************** */
 	// TEST GETTER/SETTERS
 	@Test
