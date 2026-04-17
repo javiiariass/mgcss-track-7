@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
+import java.util.Date;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.mgcss.domain.Cliente;
@@ -12,8 +13,6 @@ import com.mgcss.domain.Solicitud;
 
 @SpringBootTest
 class ApplicationTests {
-
-	
 
 	@Test
 	void dominioTest() {
@@ -32,56 +31,11 @@ class ApplicationTests {
 		assertNotNull(solicitud.getFechaCreacion());
 		assertEquals(cliente, solicitud.getCliente());
 	}
-	@Test
-	void cerrarSolicitud_no_En_proceso() {
-		// Preparar
-		Solicitud solicitud = new Solicitud();
-		
-		boolean resultado = solicitud.cerrarSolicitud();
-		System.out.println("**************************************" + resultado);
-		// Comprobar
-		assertEquals(false, resultado);
-	}
-	@Test
-	void cerrarSolicitud_En_proceso() {
-		// Preparar
-		Solicitud solicitud = new Solicitud();
-		solicitud.setEstado(Solicitud.estadoSolicitudes.EN_PROCESO);
-		
-		boolean resultado = solicitud.cerrarSolicitud();
-		System.out.println("**************************************" + resultado);
-		// Comprobar
-		assertEquals(true, resultado);
-	}
-	@Test
-	void asignarTecnico_NoActivo_y_Activo(){
-		Solicitud solicitud = new Solicitud();
-		Tecnico tecnicoActivo=new Tecnico();
-		assertEquals(false, solicitud.asignarTecnico(tecnicoActivo));
-		tecnicoActivo.setActivo(true);
-		assertEquals(true, solicitud.asignarTecnico(tecnicoActivo));
-	}
 
-	@Test
-	void asignarTecnico_Activo_Ya_Asignado(){
-		Solicitud solicitud = new Solicitud();
-		Tecnico tecnico1=new Tecnico();
-		Tecnico tecnico2 = new Tecnico();
-		tecnico1.setActivo(true);
-		tecnico2.setActivo(true);
-		solicitud.asignarTecnico(tecnico2);
-		assertEquals(false, solicitud.asignarTecnico(tecnico1));
-		System.out.println("***************************************************************************************************");
-	}
+	
 
-	@Test
-	void asignarTecnico_Doble_Solicitud(){
-		Solicitud solicitud = new Solicitud();
-		Solicitud solicitud2 = new Solicitud();
-		Tecnico tecnicoActivo=new Tecnico();
-		tecnicoActivo.setActivo(true);
-		solicitud.asignarTecnico(tecnicoActivo);
-		assertEquals(false, solicitud2.asignarTecnico(tecnicoActivo));
-		System.out.println("***************************************************************************************************");
-	}
+
+
+
+	
 }

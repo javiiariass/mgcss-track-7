@@ -1,11 +1,26 @@
 package com.mgcss.domain;
 
-public class Cliente {
+import java.util.List;
+
+public class Cliente{
+    public enum tipoCliente {
+        STANDARD, PREMIUM
+    }
 
     private Long id;
     private String nombre;
+    private String email;
+    private tipoCliente tipo;
+
     public Cliente() {
     }
+    
+    public Cliente(String nombre, String email, tipoCliente tipo) {
+        this.nombre = nombre;
+        this.email = email;
+        this.tipo = tipo;
+    }
+
     public Long getId() {
         return id;
     }
@@ -18,5 +33,25 @@ public class Cliente {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public tipoCliente getTipo() {
+        return tipo;
+    }
+    public void setTipo(tipoCliente tipo) {
+        this.tipo = tipo;
+    }
+/*
+    public Cliente crearCliente(Cliente nuevoCliente){
+        Cliente cliente = new Cliente(nuevoCliente.getNombre(),
+         nuevoCliente.getEmail(), nuevoCliente.getTipo());
+        return cliente;
+
+    }
+         */
+
 }
