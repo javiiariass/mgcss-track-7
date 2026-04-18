@@ -13,7 +13,7 @@ public class Solicitud {
     private String descripcion;
     private Tecnico tecnicoAsignado;
     private Date fechaCreacion;
-    private Date fechaCierre = null;// Todo cambiar a null @Column(nullable = true)
+    private Date fechaCierre = null;
 
     private estadoSolicitudes estado;
 

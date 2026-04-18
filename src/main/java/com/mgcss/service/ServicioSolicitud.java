@@ -16,14 +16,6 @@ public class ServicioSolicitud {
         this.solicitudRepositorio = solicitudRepositorio;
     }
 
-    public boolean cerrarSolicitud(Solicitud solicitud) {
-        if (solicitud.getEstado() == Solicitud.estadoSolicitudes.ABIERTA)
-            return false;
-
-        solicitud.setEstado(Solicitud.estadoSolicitudes.CERRADA);
-        return true;
-    }
-
     public Optional<Solicitud> findById(Long id) {
 
         return solicitudRepositorio.findById(id);
@@ -42,13 +34,13 @@ public class ServicioSolicitud {
     public Solicitud asignarTecnico(Long idSolicitud, Tecnico tecnico) {
 
         Optional<Solicitud> solicitudOpt = solicitudRepositorio.findById(idSolicitud);
-        if (solicitudOpt.isPresent()) {
-            Solicitud solicitud = solicitudOpt.get();
-            solicitud.asignarTecnico(tecnico);
-            return solicitudRepositorio.save(solicitud);
-
+        if (solicitudOpt.isEmpty()) {
+            throw new IllegalArgumentException("Solicitud no encontrada con id: " + idSolicitud);
         }
-        return null;
+
+        Solicitud solicitud = solicitudOpt.get();
+        solicitud.asignarTecnico(tecnico);
+        return solicitudRepositorio.save(solicitud);
 
     }
 
