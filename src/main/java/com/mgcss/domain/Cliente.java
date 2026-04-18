@@ -1,6 +1,5 @@
 package com.mgcss.domain;
 
-import java.util.List;
 
 public class Cliente{
     public enum tipoCliente {

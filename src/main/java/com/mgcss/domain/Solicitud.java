@@ -31,6 +31,14 @@ public class Solicitud {
         this.estado = estadoSolicitudes.ABIERTA;
     }
 
+    
+
+    public Solicitud(Long id, String descripcion, estadoSolicitudes estado) {
+        this.id = id;
+        this.descripcion = descripcion;
+        this.estado = estado;
+    }
+
     public estadoSolicitudes getEstado() {
         return estado;
     }
