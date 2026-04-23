@@ -1,10 +1,11 @@
-package com.mgcss.service;
+package com.mgcss.mgcss_track_7.service;
 
 import java.util.Optional;
 
-import com.mgcss.domain.Solicitud;
-import com.mgcss.domain.SolicitudRepositorio;
-import com.mgcss.domain.Tecnico;
+import com.mgcss.mgcss_track_7.domain.Solicitud;
+import com.mgcss.mgcss_track_7.domain.Tecnico;
+import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudRepositorio;
+
 import java.util.List;
 
 public class ServicioSolicitud {

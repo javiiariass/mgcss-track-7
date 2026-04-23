@@ -1,4 +1,4 @@
-package com.mgcss.domain;
+package com.mgcss.mgcss_track_7.domain;
 
 
 public class Cliente{

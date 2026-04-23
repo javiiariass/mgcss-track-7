@@ -1,4 +1,4 @@
-package com.mgcss.mgcss_track_7;
+package com.mgcss.mgcss_track_7.unit.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
-import com.mgcss.domain.Tecnico;
-import com.mgcss.domain.Solicitud;
+import com.mgcss.mgcss_track_7.domain.Tecnico;
+import com.mgcss.mgcss_track_7.domain.Solicitud;
 
 @SpringBootTest
 class TecnicoTest {

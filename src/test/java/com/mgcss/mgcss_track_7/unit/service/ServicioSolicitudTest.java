@@ -1,4 +1,4 @@
-package com.mgcss.mgcss_track_7;
+package com.mgcss.mgcss_track_7.unit.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -14,10 +14,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.mgcss.domain.Solicitud;
-import com.mgcss.domain.Tecnico;
-import com.mgcss.domain.SolicitudRepositorio;
-import com.mgcss.service.ServicioSolicitud;
+import com.mgcss.mgcss_track_7.domain.Solicitud;
+import com.mgcss.mgcss_track_7.domain.Tecnico;
+import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudRepositorio;
+import com.mgcss.mgcss_track_7.service.ServicioSolicitud;
 
 class ServicioSolicitudTest {
 
