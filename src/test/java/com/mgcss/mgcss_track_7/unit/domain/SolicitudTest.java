@@ -1,45 +1,20 @@
-package com.mgcss.mgcss_track_7;
+package com.mgcss.mgcss_track_7.unit.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 import org.junit.jupiter.api.Test;
 import java.util.Date;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.mgcss.domain.Cliente;
-import com.mgcss.domain.Tecnico;
-import com.mgcss.domain.Solicitud;
-import com.mgcss.service.ServicioCliente;
-import com.mgcss.service.ServicioSolicitud;
+import com.mgcss.mgcss_track_7.domain.Cliente;
+import com.mgcss.mgcss_track_7.domain.Tecnico;
+import com.mgcss.mgcss_track_7.domain.Solicitud;
+
 
 
 @SpringBootTest
 class SolicitudTest {
-
-    @Test
-    void cerrarSolicitud_no_En_proceso() {
-        // Preparar
-        Solicitud solicitud = new Solicitud();
-        ServicioSolicitud servicio = new ServicioSolicitud();
-        boolean resultado = servicio.cerrarSolicitud(solicitud);
-        System.out.println("**************************************" + resultado);
-        // Comprobar
-        assertEquals(false, resultado);
-    }
-
-    @Test
-    void cerrarSolicitud_En_proceso() {
-        // Preparar
-        Solicitud solicitud = new Solicitud();
-        solicitud.setEstado(Solicitud.estadoSolicitudes.EN_PROCESO);
-
-        ServicioSolicitud servicio = new ServicioSolicitud();
-        boolean resultado = servicio.cerrarSolicitud(solicitud);
-        System.out.println("**************************************" + resultado);
-        // Comprobar
-        assertEquals(true, resultado);
-    }
 
     @Test
     void asignarTecnico_NoActivo_y_Activo() {
@@ -63,9 +38,10 @@ class SolicitudTest {
                 "***************************************************************************************************");
     }
 
+
     @Test
     void asignarTecnico_Doble_Solicitud() {
-        Solicitud solicitud = new Solicitud();
+        Solicitud solicitud = new Solicitud(1l,"Descripcion", Solicitud.estadoSolicitudes.ABIERTA);
         Solicitud solicitud2 = new Solicitud();
         Tecnico tecnicoActivo = new Tecnico();
         tecnicoActivo.setActivo(true);

@@ -1,6 +1,5 @@
-package com.mgcss.domain;
+package com.mgcss.mgcss_track_7.domain;
 
-import java.util.List;
 
 public class Cliente{
     public enum tipoCliente {

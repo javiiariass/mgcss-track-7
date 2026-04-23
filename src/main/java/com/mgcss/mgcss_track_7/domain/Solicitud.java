@@ -1,4 +1,4 @@
-package com.mgcss.domain;
+package com.mgcss.mgcss_track_7.domain;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ public class Solicitud {
     private String descripcion;
     private Tecnico tecnicoAsignado;
     private Date fechaCreacion;
-    private Date fechaCierre = null;// Todo cambiar a null @Column(nullable = true)
+    private Date fechaCierre = null;
 
     private estadoSolicitudes estado;
 
@@ -29,6 +29,14 @@ public class Solicitud {
         this.tecnicoAsignado = tecnicoAsignado;
         this.fechaCreacion = new Date();
         this.estado = estadoSolicitudes.ABIERTA;
+    }
+
+    
+
+    public Solicitud(Long id, String descripcion, estadoSolicitudes estado) {
+        this.id = id;
+        this.descripcion = descripcion;
+        this.estado = estado;
     }
 
     public estadoSolicitudes getEstado() {
