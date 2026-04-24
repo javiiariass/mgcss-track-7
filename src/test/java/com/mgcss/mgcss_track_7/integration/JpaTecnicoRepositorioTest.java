@@ -3,8 +3,8 @@ package com.mgcss.mgcss_track_7.integration;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.JpaSolicitudRepositorio;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudEntidad;
+import com.mgcss.mgcss_track_7.infraestrucure.persistence.JpaTecnicoRepositorio;
+import com.mgcss.mgcss_track_7.infraestrucure.persistence.TecnicoEntidad;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,26 +17,26 @@ import org.junit.jupiter.api.Test;
 @DataJpaTest
 @ActiveProfiles("test")
 @Tag("integration")
-class JpaRepositoryTest {
+class JpaTecnicoRepositorioTest {
 
     @Autowired
-    private JpaSolicitudRepositorio solicitudRepositorio;
+    private JpaTecnicoRepositorio tecnicoRepositorio;
 
     @Test
     void guardarEntidad(){
-        SolicitudEntidad nuevaSolicitud = new SolicitudEntidad();
-        nuevaSolicitud.setId(1L);
+        TecnicoEntidad nuevoTecnico = new TecnicoEntidad();
+        nuevoTecnico.setId(1L);
 
-        SolicitudEntidad solicitudBD = solicitudRepositorio.save(nuevaSolicitud);
+        TecnicoEntidad tecnicoBD = tecnicoRepositorio.save(nuevoTecnico);
 
-        Optional <SolicitudEntidad> solicitudEncontrada = solicitudRepositorio.findById(solicitudBD.getId());
+        Optional <TecnicoEntidad> tecnicoEncontrado = tecnicoRepositorio.findById(tecnicoBD.getId());
 
-        assertTrue(solicitudEncontrada.isPresent());
-        assertEquals(solicitudBD.getId() ,solicitudEncontrada.get().getId());
+        assertTrue(tecnicoEncontrado.isPresent());
+        assertEquals(tecnicoBD.getId() ,tecnicoEncontrado.get().getId());
     }
     @Test
     void getterAndSettersAll(){
-        SolicitudEntidad entidad = new SolicitudEntidad(2L, "Test description", Solicitud.estadoSolicitudes.ABIERTA);
+        TecnicoEntidad entidad = new TecnicoEntidad(2L, "Test description", );
         
         // Setters
         entidad.setId(1L);
