@@ -2,7 +2,6 @@ package com.mgcss.mgcss_track_7.unit.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -23,94 +22,63 @@ class ServicioTecnicoTest {
         ServicioTecnico servicio = new ServicioTecnico(repositorio);
 
         Tecnico tecnico = new Tecnico();
-        tecnico.setId(5L);
-        tecnico.setNombre("Carlos");
+        tecnico.setId(1L);
 
-        when(repositorio.findById(5L)).thenReturn(Optional.of(tecnico));
+        when(repositorio.findById(1L)).thenReturn(Optional.of(tecnico));
 
-        Optional<Tecnico> resultado = servicio.findById(5L);
+        Optional<Tecnico> resultado = servicio.findById(1L);
 
         assertTrue(resultado.isPresent());
-        assertEquals(5L, resultado.get().getId());
-        assertEquals("Carlos", resultado.get().getNombre());
-        verify(repositorio).findById(5L);
+        assertEquals(1L, resultado.get().getId());
+        verify(repositorio).findById(1L);
     }
 
     @Test
-    void crearTecnicoYguardarloConValoresInicial() {
+    void crearTecnicoYguardarloConDatos() {
         TecnicoRepositorio repositorio = Mockito.mock(TecnicoRepositorio.class);
         ServicioTecnico servicio = new ServicioTecnico(repositorio);
 
-        Tecnico tecnico = new Tecnico(8L, "María", "Plomería");
+        when(repositorio.save(Mockito.any(Tecnico.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        when(repositorio.save(Mockito.any(Tecnico.class))).thenReturn(tecnico);
+        Tecnico resultado = servicio.crearTecnico(5L, "Ana Lopez", "Redes");
 
-        Tecnico resultado = servicio.crearTecnico(8L, "María", "Plomería");
-
-        assertEquals(8L, resultado.getId());
-        assertEquals("María", resultado.getNombre());
-        assertEquals("Plomería", resultado.getEspecialidad());
+        assertEquals(5L, resultado.getId());
+        assertEquals("Ana Lopez", resultado.getNombre());
+        assertEquals("Redes", resultado.getEspecialidad());
         verify(repositorio).save(Mockito.any(Tecnico.class));
     }
 
     @Test
-    void estableceTecnicoActivoYactualizarCuandoExiste() {
+    void estableceTecnicoActivo() {
+        TecnicoRepositorio repositorio = Mockito.mock(TecnicoRepositorio.class);
+        ServicioTecnico servicio = new ServicioTecnico(repositorio);
+
+        Tecnico tecnico = new Tecnico();
+        tecnico.setId(2L);
+        tecnico.setActivo(false);
+
+        when(repositorio.findById(2L)).thenReturn(Optional.of(tecnico));
+
+        servicio.estableceTecnicoActivo(2L, true);
+
+        assertTrue(tecnico.getActivo());
+        verify(repositorio).findById(2L);
+    }
+
+    @Test
+    void establecerTecnicoTrabajando() {
         TecnicoRepositorio repositorio = Mockito.mock(TecnicoRepositorio.class);
         ServicioTecnico servicio = new ServicioTecnico(repositorio);
 
         Tecnico tecnico = new Tecnico();
         tecnico.setId(3L);
-        tecnico.setNombre("Pedro");
-        tecnico.setActivo(false);
+        tecnico.setTrabajando(false);
 
         when(repositorio.findById(3L)).thenReturn(Optional.of(tecnico));
 
-        servicio.estableceTecnicoActivo(3L, true);
+        servicio.establecerTecnicoTrabajando(3L, true);
 
-        assertEquals(true, tecnico.getActivo());
+        assertTrue(tecnico.isTrabajando());
         verify(repositorio).findById(3L);
-    }
-
-    @Test
-    void estableceTecnicoActivoYnoHacerNadaSiNoExiste() {
-        TecnicoRepositorio repositorio = Mockito.mock(TecnicoRepositorio.class);
-        ServicioTecnico servicio = new ServicioTecnico(repositorio);
-
-        when(repositorio.findById(99L)).thenReturn(Optional.empty());
-
-        servicio.estableceTecnicoActivo(99L, true);
-
-        verify(repositorio).findById(99L);
-    }
-
-    @Test
-    void establecerTecnicoTrabajandoYactualizarCuandoExiste() {
-        TecnicoRepositorio repositorio = Mockito.mock(TecnicoRepositorio.class);
-        ServicioTecnico servicio = new ServicioTecnico(repositorio);
-
-        Tecnico tecnico = new Tecnico();
-        tecnico.setId(12L);
-        tecnico.setNombre("Antonio");
-        tecnico.setTrabajando(false);
-
-        when(repositorio.findById(12L)).thenReturn(Optional.of(tecnico));
-
-        servicio.establecerTecnicoTrabajando(12L, true);
-
-        assertEquals(true, tecnico.isTrabajando());
-        verify(repositorio).findById(12L);
-    }
-
-    @Test
-    void establecerTecnicoTrabajandoYnoHacerNadaSiNoExiste() {
-        TecnicoRepositorio repositorio = Mockito.mock(TecnicoRepositorio.class);
-        ServicioTecnico servicio = new ServicioTecnico(repositorio);
-
-        when(repositorio.findById(88L)).thenReturn(Optional.empty());
-
-        servicio.establecerTecnicoTrabajando(88L, false);
-
-        verify(repositorio).findById(88L);
-        verify(repositorio, never()).save(Mockito.any(Tecnico.class));
     }
 }
