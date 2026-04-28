@@ -44,13 +44,4 @@ public class Cliente{
     public void setTipo(tipoCliente tipo) {
         this.tipo = tipo;
     }
-/*
-    public Cliente crearCliente(Cliente nuevoCliente){
-        Cliente cliente = new Cliente(nuevoCliente.getNombre(),
-         nuevoCliente.getEmail(), nuevoCliente.getTipo());
-        return cliente;
-
-    }
-         */
-
 }
