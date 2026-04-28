@@ -36,16 +36,18 @@ class JpaTecnicoRepositorioTest {
     }
     @Test
     void getterAndSettersAll(){
-        TecnicoEntidad entidad = new TecnicoEntidad(2L, "Test description", );
-        
-        // Setters
-        entidad.setId(1L);
-        entidad.setDescripcion("Test description");
-        entidad.setEstado(Solicitud.estadoSolicitudes.ABIERTA);
-        
-        // Getters
-        assertEquals(1L, entidad.getId());
-        assertEquals("Test description", entidad.getDescripcion());
-        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, entidad.getEstado());
+     
+         TecnicoEntidad nuevoTecnico = new TecnicoEntidad();
+          nuevoTecnico.setId(1L);
+          nuevoTecnico.setNombre("Juan");
+          nuevoTecnico.setEspecialidad("Electricidad");
+          nuevoTecnico.setActivo(true);
+          nuevoTecnico.setTrabajando(false);
+    
+          assertEquals(1L, nuevoTecnico.getId());
+          assertEquals("Juan", nuevoTecnico.getNombre());
+          assertEquals("Electricidad", nuevoTecnico.getEspecialidad());
+          assertTrue(nuevoTecnico.getActivo());
+          assertFalse(nuevoTecnico.isTrabajando());
     }
 }
