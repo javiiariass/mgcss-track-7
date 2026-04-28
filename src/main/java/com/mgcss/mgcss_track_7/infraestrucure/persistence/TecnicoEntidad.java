@@ -1,11 +1,7 @@
 package com.mgcss.mgcss_track_7.infraestrucure.persistence;
 
-import com.mgcss.mgcss_track_7.domain.Solicitud;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -23,6 +19,9 @@ public class TecnicoEntidad {
 
     @Column(name = "activo")
     private boolean activo;
+
+     @Column(name = "trabajando")
+    private boolean trabajando;
 
     public TecnicoEntidad() {
     }
@@ -42,19 +41,19 @@ public class TecnicoEntidad {
         this.id = id;
     }
 
-    public String getnombre() {
+    public String getNombre() {
         return nombre;
     }
 
-    public void setnombre(String nombre) {
+    public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public boolean getEstado() {
+    public boolean getActivo() {
         return activo;
     }
 
-    public void setEstado(boolean activo) {
+    public void setActivo(boolean activo) {
         this.activo = activo;
     }
 
@@ -67,5 +66,12 @@ public class TecnicoEntidad {
     }
 
     
+    public boolean isTrabajando() {
+        return trabajando;
+    }
+
+    public void setTrabajando(boolean trabajando) {
+        this.trabajando = trabajando;
+    }
 
 }
