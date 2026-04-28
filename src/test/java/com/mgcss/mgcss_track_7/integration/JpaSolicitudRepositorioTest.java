@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 @DataJpaTest
 @ActiveProfiles("test")
 @Tag("integration")
-class JpaRepositoryTest {
+class JpaSolicitudRepositorioTest {
 
     @Autowired
     private JpaSolicitudRepositorio solicitudRepositorio;

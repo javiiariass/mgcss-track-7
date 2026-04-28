@@ -95,14 +95,12 @@ public class Solicitud {
         this.estado = estado;
     }
 
-  
-
     public boolean asignarTecnico(Tecnico tecnico) {
         boolean asignado = false;
         
-        if (tecnico.getActivo() && tecnico.getSolicitud() == null && tecnicoAsignado == null) {
+        if (tecnico.getActivo() && !tecnico.isTrabajando() && tecnicoAsignado == null) {
             this.tecnicoAsignado = tecnico;
-            tecnico.setSolicitud(this);
+            tecnico.setTrabajando(true);
             asignado = true;
         }
 

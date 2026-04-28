@@ -55,6 +55,5 @@ public class SolicitudEntidad {
         this.estado = estado;
     }
 
-    
 
 }

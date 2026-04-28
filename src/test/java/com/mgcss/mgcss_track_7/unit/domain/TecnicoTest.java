@@ -22,15 +22,18 @@ class TecnicoTest {
 		tecnico.setNombre("Ana");
 		tecnico.setEspecialidad("Redes");
 		tecnico.setActivo(true);
+		tecnico.setTrabajando(false);
 
 		Solicitud solicitud = new Solicitud();
-		tecnico.setSolicitud(solicitud);
+		solicitud.asignarTecnico(tecnico);
+
 
 		assertEquals(2L, tecnico.getId());
 		assertEquals("Ana", tecnico.getNombre());
 		assertEquals("Redes", tecnico.getEspecialidad());
 		assertEquals(true, tecnico.getActivo());
-		assertEquals(solicitud, tecnico.getSolicitud());
+		assertEquals(true, tecnico.isTrabajando());
+		
 	}
 
 	

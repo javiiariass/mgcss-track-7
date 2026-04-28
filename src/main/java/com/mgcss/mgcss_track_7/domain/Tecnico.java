@@ -6,10 +6,10 @@ public class Tecnico {
     private String nombre;
     private String especialidad;
     private boolean activo = false;
-    private Solicitud solicitud;
+    private boolean trabajando = false;
 
     public Tecnico(){
-        this.solicitud=null;
+       
     }
 
     public Tecnico(Long id, String nombre, String especialidad) {
@@ -50,12 +50,12 @@ public class Tecnico {
         this.activo = activo;
     }
 
-    public Solicitud getSolicitud() {
-        return solicitud;
+    public boolean isTrabajando() {
+        return trabajando;
     }
 
-    public void setSolicitud(Solicitud solicitud) {
-        this.solicitud = solicitud;
+    public void setTrabajando(boolean trabajando) {
+        this.trabajando = trabajando;
     }
 
     
