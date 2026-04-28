@@ -39,10 +39,15 @@ class JpaClienteRepositorioTest {
     void getterAndSettersAll() {
         ClienteEntidad entidad = new ClienteEntidad(1L, "Juan", "juan@gmail.com", Cliente.tipoCliente.PREMIUM);
         entidad.setId(1L);
+        entidad.setNombre("Juan");
+        entidad.setEmail("juan@gmail.com");
+        entidad.setTipoCliente(Cliente.tipoCliente.PREMIUM);
+
 
         // Getters
         assertEquals(1L, entidad.getId());
         assertEquals("Juan", entidad.getNombre());
         assertEquals("juan@gmail.com", entidad.getEmail());
+        assertEquals(Cliente.tipoCliente.PREMIUM, entidad.getTipoCliente());
     }
 }

@@ -2,6 +2,7 @@ package com.mgcss.mgcss_track_7.unit.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -88,6 +89,22 @@ class ServicioSolicitudTest {
         verify(repositorio).findById(21L);
         verify(repositorio).save(solicitud);
     }
+
+    @Test
+    void cambiarEstadoYnoActualizarSolicitudCuandoNoExiste() {
+        SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
+
+        when(repositorio.findById(99L)).thenReturn(Optional.empty());
+
+        Solicitud resultadoNoExiste = servicio.cambiarEstado(99L, Solicitud.estadoSolicitudes.CERRADA);
+        
+        assertNull(resultadoNoExiste);
+        verify(repositorio).findById(99L);
+        verify(repositorio, never()).save(Mockito.any(Solicitud.class));
+    }
+
+
 
     @Test
     void asignarTecnicoYactualizarSolicitud() {

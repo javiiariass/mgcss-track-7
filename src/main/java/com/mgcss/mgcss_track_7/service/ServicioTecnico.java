@@ -27,9 +27,11 @@ public class ServicioTecnico {
     }
 
     public void estableceTecnicoActivo(Long id, boolean activo){
-        Optional<Tecnico> tecnico = tecnicoRepositorio.findById(id);
-        if (tecnico.isPresent()) {
-            tecnico.get().setActivo(activo);
+        Optional<Tecnico> tecnicoOpt = tecnicoRepositorio.findById(id);
+        if (tecnicoOpt.isPresent()) {
+            Tecnico tecnico = tecnicoOpt.get();
+            tecnico.setActivo(activo);
+            tecnicoRepositorio.save(tecnico);
         }
         
     }
@@ -37,9 +39,11 @@ public class ServicioTecnico {
     
     
     public void establecerTecnicoTrabajando(Long id, boolean trabajando){
-         Optional<Tecnico> tecnico = tecnicoRepositorio.findById(id);
-        if (tecnico.isPresent()) {
-            tecnico.get().setTrabajando(trabajando);
+         Optional<Tecnico> tecnicoOpt = tecnicoRepositorio.findById(id);
+        if (tecnicoOpt.isPresent()) {
+            Tecnico tecnico = tecnicoOpt.get();
+            tecnico.setTrabajando(trabajando);
+            tecnicoRepositorio.save(tecnico);
         }
     }
     

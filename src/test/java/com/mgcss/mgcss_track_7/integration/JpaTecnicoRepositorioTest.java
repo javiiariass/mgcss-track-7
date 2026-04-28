@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import com.mgcss.mgcss_track_7.infraestrucure.persistence.JpaTecnicoRepositorio;
 import com.mgcss.mgcss_track_7.infraestrucure.persistence.TecnicoEntidad;
-import com.mgcss.mgcss_track_7.domain.Solicitud;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
@@ -24,8 +23,8 @@ class JpaTecnicoRepositorioTest {
 
     @Test
     void guardarEntidad(){
-        TecnicoEntidad nuevoTecnico = new TecnicoEntidad();
-        nuevoTecnico.setId(1L);
+        TecnicoEntidad nuevoTecnico = new TecnicoEntidad(1L,"jUAN",true,"Electricidad");
+        nuevoTecnico.setTrabajando(false);
 
         TecnicoEntidad tecnicoBD = tecnicoRepositorio.save(nuevoTecnico);
 

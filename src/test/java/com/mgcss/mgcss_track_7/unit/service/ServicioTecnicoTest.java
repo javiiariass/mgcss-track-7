@@ -31,6 +31,7 @@ class ServicioTecnicoTest {
         assertTrue(resultado.isPresent());
         assertEquals(1L, resultado.get().getId());
         verify(repositorio).findById(1L);
+
     }
 
     @Test
@@ -58,11 +59,28 @@ class ServicioTecnicoTest {
         tecnico.setActivo(false);
 
         when(repositorio.findById(2L)).thenReturn(Optional.of(tecnico));
+        when(repositorio.save(tecnico)).thenReturn(tecnico);
+
 
         servicio.estableceTecnicoActivo(2L, true);
 
         assertTrue(tecnico.getActivo());
         verify(repositorio).findById(2L);
+        verify(repositorio).save(tecnico);
+    }
+
+    @Test
+    void estableceTecnicoActivoNoPresente() {
+        TecnicoRepositorio repositorio = Mockito.mock(TecnicoRepositorio.class);
+        ServicioTecnico servicio = new ServicioTecnico(repositorio);
+
+        when(repositorio.findById(99L)).thenReturn(Optional.empty());
+
+        servicio.estableceTecnicoActivo(99L, true);
+
+        verify(repositorio).findById(99L);
+        verify(repositorio, Mockito.never()).save(Mockito.any(Tecnico.class));
+
     }
 
     @Test
@@ -75,10 +93,27 @@ class ServicioTecnicoTest {
         tecnico.setTrabajando(false);
 
         when(repositorio.findById(3L)).thenReturn(Optional.of(tecnico));
+        when(repositorio.save(tecnico)).thenReturn(tecnico);
 
         servicio.establecerTecnicoTrabajando(3L, true);
 
         assertTrue(tecnico.isTrabajando());
         verify(repositorio).findById(3L);
+        verify(repositorio).save(tecnico);
+     
     }
+
+    @Test
+    void establecerTecnicoTrabajandoNoPresente() {
+        TecnicoRepositorio repositorio = Mockito.mock(TecnicoRepositorio.class);
+        ServicioTecnico servicio = new ServicioTecnico(repositorio);
+
+        when(repositorio.findById(99L)).thenReturn(Optional.empty());
+
+        servicio.establecerTecnicoTrabajando(99L, true);
+
+        verify(repositorio).findById(99L);
+        verify(repositorio, Mockito.never()).save(Mockito.any(Tecnico.class));
+    }
+
 }
