@@ -95,8 +95,6 @@ public class Solicitud {
         this.estado = estado;
     }
 
-  
-
     public boolean asignarTecnico(Tecnico tecnico) {
         boolean asignado = false;
         

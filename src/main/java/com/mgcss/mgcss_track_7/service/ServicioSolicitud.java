@@ -12,6 +12,7 @@ public class ServicioSolicitud {
 
     public final SolicitudRepositorio solicitudRepositorio;
     List<Solicitud> solicitudes;
+    
 
     public ServicioSolicitud(SolicitudRepositorio solicitudRepositorio) {
         this.solicitudRepositorio = solicitudRepositorio;
