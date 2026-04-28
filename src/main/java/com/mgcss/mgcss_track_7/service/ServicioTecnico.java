@@ -27,29 +27,21 @@ public class ServicioTecnico {
     }
 
     public void estableceTecnicoActivo(Long id, boolean activo){
-        tecnicoRepositorio.findById(id).get().setActivo(activo);
+        Optional<Tecnico> tecnico = tecnicoRepositorio.findById(id);
+        if (tecnico.isPresent()) {
+            tecnico.get().setActivo(activo);
+        }
+        
     }
+
     
-    // TODO DANI crea este medoto con el atributo nuevo
-    // public void estableceTecnicoActivo(Long id, boolean activo){
-    //     tecnicoRepositorio.findById(id).get().setActivo(activo);
-    // }
-    // public void trabajando o no trabajando
-
-    // REVIEW hay que implementarlo si mantenemos la doble relación entre Tecnico y solicitud 
-    // public Tecnico asignarSolicitud(Long id, Solicitud solicitud) {
-
-    //     Optional<Solicitud> solicitudOpt = solicitudRepositorio.findById(idSolicitud);
-    //     if (solicitudOpt.isEmpty()) {
-    //         throw new IllegalArgumentException("Solicitud no encontrada con id: " + idSolicitud);
-    //     }
-
-    //     Solicitud solicitud = solicitudOpt.get();
-    //     solicitud.asignarTecnico(tecnico);
-    //     return solicitudRepositorio.save(solicitud);
-
-    // }
-
+    
+    public void establecerTecnicoTrabajando(Long id, boolean trabajando){
+         Optional<Tecnico> tecnico = tecnicoRepositorio.findById(id);
+        if (tecnico.isPresent()) {
+            tecnico.get().setTrabajando(trabajando);
+        }
+    }
     
 
 }
