@@ -11,7 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Solicitud {
     public enum estadoSolicitudes {
-        ABIERTA, EN_PROCESO, CERRADA
+        ABIERTA, EN_PROCESO, CERRADA;
+
+        public estadoSolicitudes siguiente() {
+            estadoSolicitudes[] vals = values();
+            return vals[(this.ordinal() + 1) % vals.length];
+        }
     }
 
     private Long id;
@@ -48,6 +53,10 @@ public class Solicitud {
             asignado = true;
         }
         return asignado;
+    }
+
+    public void siguienteEstado(){
+        this.setEstado(estado.siguiente());
     }
 
 }

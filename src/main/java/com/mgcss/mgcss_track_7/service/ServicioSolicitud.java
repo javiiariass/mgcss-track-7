@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
+import com.mgcss.mgcss_track_7.domain.Solicitud.estadoSolicitudes;
 import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudRepositorio;
 
 import java.util.List;
@@ -46,12 +47,18 @@ public class ServicioSolicitud {
 
     }
 
-    public Solicitud cambiarEstado(Long idSolicitud, Solicitud.estadoSolicitudes nuevoEstado) {
+    public Solicitud cambiarEstado(Long idSolicitud) {
 
         Optional<Solicitud> solicitudOpt = solicitudRepositorio.findById(idSolicitud);
         if (solicitudOpt.isPresent()) {
             Solicitud solicitud = solicitudOpt.get();
-            solicitud.setEstado(nuevoEstado);
+
+            // Si cerrada, quitamos tecnico
+            solicitud.siguienteEstado();
+            if(solicitud.getEstado() == Solicitud.estadoSolicitudes.CERRADA){
+                solicitud.getTecnicoAsignado().setTrabajando(false);
+                solicitud.setTecnicoAsignado(null);
+            }
             return solicitudRepositorio.save(solicitud);
 
         }
