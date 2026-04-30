@@ -15,7 +15,10 @@ public class Solicitud {
 
         public estadoSolicitudes siguiente() {
             estadoSolicitudes[] vals = values();
-            return vals[(this.ordinal() + 1) % vals.length];
+            if ((this.ordinal() + 1) == vals.length)
+                return CERRADA;
+            else          
+                return vals[(this.ordinal() + 1)];
         }
     }
 
