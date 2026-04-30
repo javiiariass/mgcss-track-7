@@ -46,7 +46,7 @@ class JpaTecnicoRepositorioTest {
           assertEquals(1L, nuevoTecnico.getId());
           assertEquals("Juan", nuevoTecnico.getNombre());
           assertEquals("Electricidad", nuevoTecnico.getEspecialidad());
-          assertTrue(nuevoTecnico.getActivo());
+          assertTrue(nuevoTecnico.isActivo());
           assertFalse(nuevoTecnico.isTrabajando());
     }
 }

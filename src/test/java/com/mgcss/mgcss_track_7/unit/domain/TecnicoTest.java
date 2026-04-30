@@ -31,7 +31,7 @@ class TecnicoTest {
 		assertEquals(2L, tecnico.getId());
 		assertEquals("Ana", tecnico.getNombre());
 		assertEquals("Redes", tecnico.getEspecialidad());
-		assertEquals(true, tecnico.getActivo());
+		assertEquals(true, tecnico.isActivo());
 		assertEquals(true, tecnico.isTrabajando());
 		
 	}
