@@ -82,7 +82,7 @@ class ServicioSolicitudTest {
         when(repositorio.findById(21L)).thenReturn(Optional.of(solicitud));
         when(repositorio.save(solicitud)).thenReturn(solicitud);
 
-        Solicitud resultado = servicio.cambiarEstado(21L, Solicitud.estadoSolicitudes.EN_PROCESO);
+        Solicitud resultado = servicio.cambiarEstado(21L);
 
         assertNotNull(resultado);
         assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, resultado.getEstado());
@@ -97,11 +97,35 @@ class ServicioSolicitudTest {
 
         when(repositorio.findById(99L)).thenReturn(Optional.empty());
 
-        Solicitud resultadoNoExiste = servicio.cambiarEstado(99L, Solicitud.estadoSolicitudes.CERRADA);
+        Solicitud resultadoNoExiste = servicio.cambiarEstado(99L);
         
         assertNull(resultadoNoExiste);
         verify(repositorio).findById(99L);
         verify(repositorio, never()).save(Mockito.any(Solicitud.class));
+    }
+
+    @Test
+    void cambiarEstadoYEliminarTecnico(){
+        SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
+        Tecnico tecnico = new Tecnico();
+        Solicitud solicitud = new Solicitud();
+
+        solicitud.setId(21L);
+        solicitud.setEstado(Solicitud.estadoSolicitudes.EN_PROCESO);
+        tecnico.setActivo(true);
+        tecnico.setTrabajando(false);
+        solicitud.asignarTecnico(tecnico);
+
+        when(repositorio.findById(21L)).thenReturn(Optional.of(solicitud));
+        when(repositorio.save(solicitud)).thenReturn(solicitud);
+
+        Solicitud resultado = servicio.cambiarEstado(21L);
+
+        assertNotNull(resultado);
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, resultado.getEstado());
+        verify(repositorio).findById(21L);
+        verify(repositorio).save(solicitud);
     }
 
 
