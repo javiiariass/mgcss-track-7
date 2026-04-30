@@ -9,6 +9,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+
 @Entity
 @Table(name = "solicitudes")
 public class SolicitudEntidad {
@@ -22,38 +30,11 @@ public class SolicitudEntidad {
     @Column(name = "estado")
     private Solicitud.estadoSolicitudes estado;
 
-    public SolicitudEntidad() {
-    }
 
     public SolicitudEntidad(Long id, String descripcion, Solicitud.estadoSolicitudes estado) {
         this.id = id;
         this.descripcion = descripcion;
         this.estado = estado;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Solicitud.estadoSolicitudes getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Solicitud.estadoSolicitudes estado) {
-        this.estado = estado;
-    }
-
 
 }

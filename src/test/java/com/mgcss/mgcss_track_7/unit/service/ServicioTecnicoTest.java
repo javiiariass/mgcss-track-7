@@ -64,7 +64,7 @@ class ServicioTecnicoTest {
 
         servicio.estableceTecnicoActivo(2L, true);
 
-        assertTrue(tecnico.getActivo());
+        assertTrue(tecnico.isActivo());
         verify(repositorio).findById(2L);
         verify(repositorio).save(tecnico);
     }
