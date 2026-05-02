@@ -1,20 +1,37 @@
 package com.mgcss.mgcss_track_7.unit.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import java.util.Date;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.mgcss.mgcss_track_7.domain.Cliente;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
+import com.mgcss.mgcss_track_7.domain.Solicitud.estadoSolicitudes;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 
-
-
-@SpringBootTest
 class SolicitudTest {
+
+    @Test
+    void cerrarSolicitud() {
+        // flujo correcto
+        Solicitud solicitud1 = new Solicitud(2L, "", estadoSolicitudes.EN_PROCESO);
+        solicitud1.cerrar();
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud1.getEstado());
+
+        // flujo correcto 2
+        Solicitud solicitud2 = new Solicitud();
+        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud2.getEstado());
+        solicitud2.siguienteEstado();
+        solicitud2.cerrar();
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud2.getEstado());
+
+        // flujo incorrecto
+        Solicitud solicitud3 = new Solicitud();
+        assertThrows(IllegalStateException.class, solicitud3::cerrar);
+
+    }
 
     @Test
     void asignarTecnico_NoActivo_y_Activo() {
@@ -38,10 +55,9 @@ class SolicitudTest {
                 "***************************************************************************************************");
     }
 
-
     @Test
     void asignarTecnico_Doble_Solicitud() {
-        Solicitud solicitud = new Solicitud(1l,"Descripcion", Solicitud.estadoSolicitudes.ABIERTA);
+        Solicitud solicitud = new Solicitud(1l, "Descripcion", Solicitud.estadoSolicitudes.ABIERTA);
         Solicitud solicitud2 = new Solicitud();
         Tecnico tecnicoActivo = new Tecnico();
         tecnicoActivo.setActivo(true);
@@ -50,28 +66,27 @@ class SolicitudTest {
         System.out.println(
                 "***************************************************************************************************");
     }
+
     @Test
-	void testSolicitudGettersSetters() {
-		Solicitud solicitud = new Solicitud();
-		Cliente cliente = new Cliente();
-		Tecnico tecnico = new Tecnico();
-		Date fecha = new Date();
+    void testSolicitudGettersSetters() {
+        Solicitud solicitud = new Solicitud();
+        Cliente cliente = new Cliente();
+        Tecnico tecnico = new Tecnico();
+        Date fecha = new Date();
 
-		solicitud.setId(100L);
-		solicitud.setCliente(cliente);
-		solicitud.setDescripcion("Error de software");
-		solicitud.setTecnicoAsignado(tecnico);
-		solicitud.setFechaCreacion(fecha);
-		solicitud.setFechaCierre(fecha);
-		solicitud.setEstado(Solicitud.estadoSolicitudes.EN_PROCESO);
+        solicitud.setId(100L);
+        solicitud.setCliente(cliente);
+        solicitud.setDescripcion("Error de software");
+        solicitud.setTecnicoAsignado(tecnico);
+        solicitud.setFechaCreacion(fecha);
+        solicitud.setFechaCierre(fecha);
 
-		assertEquals(100L, solicitud.getId());
-		assertEquals(cliente, solicitud.getCliente());
-		assertEquals("Error de software", solicitud.getDescripcion());
-		assertEquals(tecnico, solicitud.getTecnicoAsignado());
-		assertEquals(fecha, solicitud.getFechaCreacion());
-		assertEquals(fecha, solicitud.getFechaCierre());
-		assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getEstado());
-	}
+        assertEquals(100L, solicitud.getId());
+        assertEquals(cliente, solicitud.getCliente());
+        assertEquals("Error de software", solicitud.getDescripcion());
+        assertEquals(tecnico, solicitud.getTecnicoAsignado());
+        assertEquals(fecha, solicitud.getFechaCreacion());
+        assertEquals(fecha, solicitud.getFechaCierre());
+    }
 
 }

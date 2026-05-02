@@ -2,6 +2,7 @@ package com.mgcss.mgcss_track_7.domain;
 
 import java.util.Date;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,7 +31,10 @@ public class Solicitud {
     private Date fechaCreacion;
     private Date fechaCierre = null;
 
-    private estadoSolicitudes estado;
+    // Quitamos setter para no permitir mutar estado fuera de los métodos\
+    // que cumplan las reglas de negocio
+    @Setter(AccessLevel.NONE) 
+    private estadoSolicitudes estado = estadoSolicitudes.ABIERTA;
 
     public Solicitud(Long id, Cliente cliente, String descripcion, Tecnico tecnicoAsignado) {
         this.id = id;
@@ -38,7 +42,6 @@ public class Solicitud {
         this.descripcion = descripcion;
         this.tecnicoAsignado = tecnicoAsignado;
         this.fechaCreacion = new Date();
-        this.estado = estadoSolicitudes.ABIERTA;
     }
 
     public Solicitud(Long id, String descripcion, estadoSolicitudes estado) {
@@ -58,8 +61,15 @@ public class Solicitud {
         return asignado;
     }
 
+    public void cerrar() {
+        if(this.estado != estadoSolicitudes.EN_PROCESO){
+            throw new IllegalStateException("No se puede cerrar una solititud que no esté en proceso\n");
+        }
+        this.estado = estadoSolicitudes.CERRADA;
+    }
+
     public void siguienteEstado(){
-        this.setEstado(estado.siguiente());
+        this.estado = this.estado.siguiente();
     }
 
 }
