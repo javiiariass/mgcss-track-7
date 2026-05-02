@@ -90,4 +90,18 @@ class SolicitudTest {
         assertEquals(true, solicitud.asignarTecnico(null));
     }
 
+    @Test
+    void testReabrirSolicitud(){
+        Tecnico tecnicoActivo = new Tecnico(1L, "Juan", "Electricista");
+        Cliente cliente = new Cliente();
+        Solicitud solicitud = new Solicitud(1l, cliente, "Descripcion", tecnicoActivo);
+
+        solicitud.siguienteEstado();
+        solicitud.siguienteEstado();
+
+        // Solicitud cerrada, reabrimos
+        solicitud.reabrir(tecnicoActivo);
+        assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO ,solicitud.getEstado());
+    }
+
 }
