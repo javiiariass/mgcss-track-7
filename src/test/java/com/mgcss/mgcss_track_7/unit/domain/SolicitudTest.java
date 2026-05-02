@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import java.util.Date;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.mgcss.mgcss_track_7.domain.Cliente;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
@@ -21,19 +20,27 @@ class SolicitudTest {
     void cerrarSolicitud(){
         // flujo correcto
         Solicitud solicitud_1 = new Solicitud(2L,"",estadoSolicitudes.EN_PROCESO);
-        solicitud_1.cerrar();
+        try {
+            solicitud_1.cerrar();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud_1.getEstado());
         
-        // flujo incorrecto 2
+        // flujo correcto 2
         Solicitud solicitud_2 = new Solicitud();
-        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud_1.getEstado());
+        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud_2.getEstado());
         solicitud_2.siguienteEstado();
-        solicitud_2.cerrar();
+        try {
+            solicitud_2.cerrar();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud_2.getEstado());
 
         // flujo incorrecto 
         Solicitud solicitud_3 = new Solicitud();
-        assertThrows(RuntimeException.class, ()-> solicitud_3.cerrar());
+        assertThrows(Exception.class, ()-> solicitud_3.cerrar());
 
     }
 
@@ -86,7 +93,7 @@ class SolicitudTest {
 		solicitud.setTecnicoAsignado(tecnico);
 		solicitud.setFechaCreacion(fecha);
 		solicitud.setFechaCierre(fecha);
-		solicitud.setEstado(Solicitud.estadoSolicitudes.EN_PROCESO);
+		
 
 		assertEquals(100L, solicitud.getId());
 		assertEquals(cliente, solicitud.getCliente());
@@ -94,7 +101,6 @@ class SolicitudTest {
 		assertEquals(tecnico, solicitud.getTecnicoAsignado());
 		assertEquals(fecha, solicitud.getFechaCreacion());
 		assertEquals(fecha, solicitud.getFechaCierre());
-		assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getEstado());
 	}
 
 }

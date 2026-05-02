@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
+import com.mgcss.mgcss_track_7.domain.Solicitud.estadoSolicitudes;
 import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudRepositorio;
 import com.mgcss.mgcss_track_7.service.ServicioSolicitud;
 
@@ -75,10 +76,9 @@ class ServicioSolicitudTest {
         SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
         ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
 
-        Solicitud solicitud = new Solicitud();
-        solicitud.setId(21L);
-        solicitud.setEstado(Solicitud.estadoSolicitudes.ABIERTA);
-
+        Solicitud solicitud = new Solicitud(21L, "", estadoSolicitudes.ABIERTA);
+        
+        
         when(repositorio.findById(21L)).thenReturn(Optional.of(solicitud));
         when(repositorio.save(solicitud)).thenReturn(solicitud);
 
@@ -109,10 +109,8 @@ class ServicioSolicitudTest {
         SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
         ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
         Tecnico tecnico = new Tecnico();
-        Solicitud solicitud = new Solicitud();
+        Solicitud solicitud = new Solicitud(21L,"", estadoSolicitudes.EN_PROCESO);
 
-        solicitud.setId(21L);
-        solicitud.setEstado(Solicitud.estadoSolicitudes.EN_PROCESO);
         tecnico.setActivo(true);
         tecnico.setTrabajando(false);
         solicitud.asignarTecnico(tecnico);
