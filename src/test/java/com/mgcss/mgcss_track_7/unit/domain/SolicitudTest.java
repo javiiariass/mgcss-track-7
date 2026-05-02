@@ -11,36 +11,25 @@ import com.mgcss.mgcss_track_7.domain.Tecnico;
 import com.mgcss.mgcss_track_7.domain.Solicitud.estadoSolicitudes;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 
-
-
-
 class SolicitudTest {
 
     @Test
-    void cerrarSolicitud(){
+    void cerrarSolicitud() {
         // flujo correcto
-        Solicitud solicitud_1 = new Solicitud(2L,"",estadoSolicitudes.EN_PROCESO);
-        try {
-            solicitud_1.cerrar();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud_1.getEstado());
-        
-        // flujo correcto 2
-        Solicitud solicitud_2 = new Solicitud();
-        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud_2.getEstado());
-        solicitud_2.siguienteEstado();
-        try {
-            solicitud_2.cerrar();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud_2.getEstado());
+        Solicitud solicitud1 = new Solicitud(2L, "", estadoSolicitudes.EN_PROCESO);
+        solicitud1.cerrar();
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud1.getEstado());
 
-        // flujo incorrecto 
-        Solicitud solicitud_3 = new Solicitud();
-        assertThrows(Exception.class, ()-> solicitud_3.cerrar());
+        // flujo correcto 2
+        Solicitud solicitud2 = new Solicitud();
+        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud2.getEstado());
+        solicitud2.siguienteEstado();
+        solicitud2.cerrar();
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud2.getEstado());
+
+        // flujo incorrecto
+        Solicitud solicitud3 = new Solicitud();
+        assertThrows(IllegalStateException.class, solicitud3::cerrar);
 
     }
 
@@ -52,8 +41,6 @@ class SolicitudTest {
         tecnicoActivo.setActivo(true);
         assertEquals(true, solicitud.asignarTecnico(tecnicoActivo));
     }
-
-
 
     @Test
     void asignarTecnico_Activo_Ya_Asignado() {
@@ -68,10 +55,9 @@ class SolicitudTest {
                 "***************************************************************************************************");
     }
 
-
     @Test
     void asignarTecnico_Doble_Solicitud() {
-        Solicitud solicitud = new Solicitud(1l,"Descripcion", Solicitud.estadoSolicitudes.ABIERTA);
+        Solicitud solicitud = new Solicitud(1l, "Descripcion", Solicitud.estadoSolicitudes.ABIERTA);
         Solicitud solicitud2 = new Solicitud();
         Tecnico tecnicoActivo = new Tecnico();
         tecnicoActivo.setActivo(true);
@@ -80,27 +66,27 @@ class SolicitudTest {
         System.out.println(
                 "***************************************************************************************************");
     }
+
     @Test
-	void testSolicitudGettersSetters() {
-		Solicitud solicitud = new Solicitud();
-		Cliente cliente = new Cliente();
-		Tecnico tecnico = new Tecnico();
-		Date fecha = new Date();
+    void testSolicitudGettersSetters() {
+        Solicitud solicitud = new Solicitud();
+        Cliente cliente = new Cliente();
+        Tecnico tecnico = new Tecnico();
+        Date fecha = new Date();
 
-		solicitud.setId(100L);
-		solicitud.setCliente(cliente);
-		solicitud.setDescripcion("Error de software");
-		solicitud.setTecnicoAsignado(tecnico);
-		solicitud.setFechaCreacion(fecha);
-		solicitud.setFechaCierre(fecha);
-		
+        solicitud.setId(100L);
+        solicitud.setCliente(cliente);
+        solicitud.setDescripcion("Error de software");
+        solicitud.setTecnicoAsignado(tecnico);
+        solicitud.setFechaCreacion(fecha);
+        solicitud.setFechaCierre(fecha);
 
-		assertEquals(100L, solicitud.getId());
-		assertEquals(cliente, solicitud.getCliente());
-		assertEquals("Error de software", solicitud.getDescripcion());
-		assertEquals(tecnico, solicitud.getTecnicoAsignado());
-		assertEquals(fecha, solicitud.getFechaCreacion());
-		assertEquals(fecha, solicitud.getFechaCierre());
-	}
+        assertEquals(100L, solicitud.getId());
+        assertEquals(cliente, solicitud.getCliente());
+        assertEquals("Error de software", solicitud.getDescripcion());
+        assertEquals(tecnico, solicitud.getTecnicoAsignado());
+        assertEquals(fecha, solicitud.getFechaCreacion());
+        assertEquals(fecha, solicitud.getFechaCierre());
+    }
 
 }

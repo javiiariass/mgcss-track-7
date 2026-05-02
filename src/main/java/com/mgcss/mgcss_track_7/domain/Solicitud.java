@@ -61,9 +61,9 @@ public class Solicitud {
         return asignado;
     }
 
-    public void cerrar() throws Exception{
+    public void cerrar() {
         if(this.estado != estadoSolicitudes.EN_PROCESO){
-            throw new Exception("No se puede cerrar una solititud que no esté en proceso\n");
+            throw new IllegalStateException("No se puede cerrar una solititud que no esté en proceso\n");
         }
         this.estado = estadoSolicitudes.CERRADA;
     }
