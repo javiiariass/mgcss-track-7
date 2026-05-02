@@ -121,21 +121,31 @@ class SolicitudTest {
     }
 
     @Test
-    void testHistoricoEstados(){
+    void testReabrirSolicitudNoCerrada() {
+        Tecnico tecnicoActivo = new Tecnico(1L, "Juan", "Electricista");
+        Cliente cliente = new Cliente();
+        Solicitud solicitud = new Solicitud(1l, cliente, "Descripcion", tecnicoActivo);
+        solicitud.reabrir(tecnicoActivo);
+
+        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud.getEstado());
+    }
+
+    @Test
+    void testHistoricoEstados() {
         Tecnico tecnicoActivo = new Tecnico(1L, "Juan", "Electricista");
         Cliente cliente = new Cliente();
         Solicitud solicitud = new Solicitud(1l, cliente, "Descripcion", tecnicoActivo);
 
         solicitud.siguienteEstado();
         solicitud.siguienteEstado();
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud.getEstado().siguiente());
         solicitud.reabrir(tecnicoActivo);
 
-        assertEquals(4,solicitud.getHistorico().size());
+        assertEquals(4, solicitud.getHistorico().size());
         assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud.getHistorico().get(0));
         assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getHistorico().get(1));
         assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud.getHistorico().get(2));
         assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getHistorico().get(3));
-
     }
 
 }

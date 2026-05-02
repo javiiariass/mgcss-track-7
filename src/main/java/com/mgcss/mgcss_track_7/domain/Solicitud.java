@@ -30,7 +30,7 @@ public class Solicitud {
     private Tecnico tecnicoAsignado;
     private Date fechaCreacion;
     private Date fechaCierre = null;
-    private List<estadoSolicitudes> historico = new ArrayList();
+    private List<estadoSolicitudes> historico;
 
     // Quitamos setter para no permitir mutar estado fuera de los métodos\
     // que cumplan las reglas de negocio
@@ -43,10 +43,12 @@ public class Solicitud {
         this.descripcion = descripcion;
         this.tecnicoAsignado = tecnicoAsignado;
         this.fechaCreacion = new Date();
+        this.historico = new ArrayList<>();
         historico.add(estado);
     }
 
     public Solicitud(){
+        this.historico = new ArrayList<>();
         historico.add(estado);
     }
 
