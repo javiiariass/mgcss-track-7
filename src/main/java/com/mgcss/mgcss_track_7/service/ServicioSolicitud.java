@@ -52,13 +52,7 @@ public class ServicioSolicitud {
         Optional<Solicitud> solicitudOpt = solicitudRepositorio.findById(idSolicitud);
         if (solicitudOpt.isPresent()) {
             Solicitud solicitud = solicitudOpt.get();
-
-            // Si cerrada, quitamos tecnico
             solicitud.siguienteEstado();
-            if(solicitud.getEstado() == Solicitud.estadoSolicitudes.CERRADA){
-                solicitud.getTecnicoAsignado().setTrabajando(false);
-                solicitud.asignarTecnico(null);
-            }
             return solicitudRepositorio.save(solicitud);
 
         }
