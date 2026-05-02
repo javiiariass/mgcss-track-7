@@ -1,6 +1,7 @@
 package com.mgcss.mgcss_track_7.unit.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,8 @@ import com.mgcss.mgcss_track_7.domain.Solicitud;
 class SolicitudTest {
 
     @Test
-    void cerrarSolicitud() {        
-        // flujo correcto 
+    void cerrarSolicitud() {
+        // flujo correcto
         Solicitud solicitud2 = new Solicitud();
         assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud2.getEstado());
         solicitud2.siguienteEstado();
@@ -91,7 +92,7 @@ class SolicitudTest {
     }
 
     @Test
-    void testReabrirSolicitud(){
+    void testReabrirSolicitud() {
         Tecnico tecnicoActivo = new Tecnico(1L, "Juan", "Electricista");
         Cliente cliente = new Cliente();
         Solicitud solicitud = new Solicitud(1l, cliente, "Descripcion", tecnicoActivo);
@@ -101,7 +102,23 @@ class SolicitudTest {
 
         // Solicitud cerrada, reabrimos
         solicitud.reabrir(tecnicoActivo);
-        assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO ,solicitud.getEstado());
+        assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getEstado());
+
+    }
+
+    @Test
+    void testReabrirSolicitudExcepcion() {
+        Tecnico tecnicoActivo = new Tecnico(1L, "Juan", "Electricista");
+        Cliente cliente = new Cliente();
+        Solicitud solicitud = new Solicitud(1l, cliente, "Descripcion", tecnicoActivo);
+
+        solicitud.siguienteEstado();
+        solicitud.siguienteEstado();
+
+        tecnicoActivo.setActivo(false);
+
+        // Solicitud cerrada, reabrimos (debe fallar porque el técnico está inactivo)
+        assertThrows(IllegalArgumentException.class, () -> solicitud.reabrir(tecnicoActivo));
     }
 
 }

@@ -77,4 +77,13 @@ public class Solicitud {
             this.estado = this.estado.siguiente(); 
     }
 
+    public void reabrir(Tecnico tecnico){
+        if(estado == estadoSolicitudes.CERRADA){
+            if(!asignarTecnico(tecnico)){
+                throw new IllegalArgumentException("El técnico proporcionado no está disponible (inactivo o ya se encuentra trabajando).\n");
+            }
+            estado = estadoSolicitudes.EN_PROCESO;
+        }
+    }
+
 }
