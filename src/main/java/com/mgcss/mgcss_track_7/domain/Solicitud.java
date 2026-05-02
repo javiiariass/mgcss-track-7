@@ -16,9 +16,9 @@ public class Solicitud {
 
         public estadoSolicitudes siguiente() {
             estadoSolicitudes[] vals = values();
-            if ((this.ordinal() + 1) == vals.length)
+            if ((this.ordinal() + 1) == vals.length) {
                 return CERRADA;
-            else
+            } else
                 return vals[(this.ordinal() + 1)];
         }
     }
@@ -65,11 +65,16 @@ public class Solicitud {
         if (this.estado != estadoSolicitudes.EN_PROCESO) {
             throw new IllegalStateException("No se puede cerrar una solititud que no esté en proceso\n");
         }
+        // Desasignamos tecnico
+        asignarTecnico(null);
         this.estado = estadoSolicitudes.CERRADA;
     }
 
     public void siguienteEstado() {
-        this.estado = this.estado.siguiente();
+        if(this.estado.siguiente() == estadoSolicitudes.CERRADA)
+            cerrar();   // para manejar el tecnico asignado 
+        else
+            this.estado = this.estado.siguiente(); 
     }
 
 }
