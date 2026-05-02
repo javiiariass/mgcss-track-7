@@ -1,7 +1,7 @@
 package com.mgcss.mgcss_track_7.unit.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import java.util.Date;
@@ -9,12 +9,33 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.mgcss.mgcss_track_7.domain.Cliente;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
+import com.mgcss.mgcss_track_7.domain.Solicitud.estadoSolicitudes;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 
 
 
-@SpringBootTest
+
 class SolicitudTest {
+
+    @Test
+    void cerrarSolicitud(){
+        // flujo correcto
+        Solicitud solicitud_1 = new Solicitud(2L,"",estadoSolicitudes.EN_PROCESO);
+        solicitud_1.cerrar();
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud_1.getEstado());
+        
+        // flujo incorrecto 2
+        Solicitud solicitud_2 = new Solicitud();
+        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud_1.getEstado());
+        solicitud_2.siguienteEstado();
+        solicitud_2.cerrar();
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud_2.getEstado());
+
+        // flujo incorrecto 
+        Solicitud solicitud_3 = new Solicitud();
+        assertThrows(RuntimeException.class, ()-> solicitud_3.cerrar());
+
+    }
 
     @Test
     void asignarTecnico_NoActivo_y_Activo() {
@@ -24,6 +45,8 @@ class SolicitudTest {
         tecnicoActivo.setActivo(true);
         assertEquals(true, solicitud.asignarTecnico(tecnicoActivo));
     }
+
+
 
     @Test
     void asignarTecnico_Activo_Ya_Asignado() {

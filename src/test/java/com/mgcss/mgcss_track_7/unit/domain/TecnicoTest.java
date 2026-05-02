@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 
-@SpringBootTest
+
 class TecnicoTest {
 
 
