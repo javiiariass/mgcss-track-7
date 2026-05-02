@@ -18,7 +18,7 @@ public class Solicitud {
             estadoSolicitudes[] vals = values();
             if ((this.ordinal() + 1) == vals.length)
                 return CERRADA;
-            else          
+            else
                 return vals[(this.ordinal() + 1)];
         }
     }
@@ -27,13 +27,14 @@ public class Solicitud {
 
     private Cliente cliente;
     private String descripcion;
+    @Setter(AccessLevel.NONE)
     private Tecnico tecnicoAsignado;
     private Date fechaCreacion;
     private Date fechaCierre = null;
 
     // Quitamos setter para no permitir mutar estado fuera de los métodos\
     // que cumplan las reglas de negocio
-    @Setter(AccessLevel.NONE) 
+    @Setter(AccessLevel.NONE)
     private estadoSolicitudes estado = estadoSolicitudes.ABIERTA;
 
     public Solicitud(Long id, Cliente cliente, String descripcion, Tecnico tecnicoAsignado) {
@@ -44,16 +45,15 @@ public class Solicitud {
         this.fechaCreacion = new Date();
     }
 
-    public Solicitud(Long id, String descripcion, estadoSolicitudes estado) {
-        this.id = id;
-        this.descripcion = descripcion;
-        this.estado = estado;
-    }
-
     public boolean asignarTecnico(Tecnico tecnico) {
         boolean asignado = false;
-
-        if (tecnico.isActivo() && !tecnico.isTrabajando() && tecnicoAsignado == null) {
+        if (tecnico == null) {
+            if (tecnicoAsignado != null) {
+                tecnicoAsignado.setTrabajando(false);
+            }
+            this.tecnicoAsignado = null;
+            asignado = true;
+        } else if (tecnico.isActivo() && !tecnico.isTrabajando() && tecnicoAsignado == null) {
             this.tecnicoAsignado = tecnico;
             tecnico.setTrabajando(true);
             asignado = true;
@@ -62,13 +62,13 @@ public class Solicitud {
     }
 
     public void cerrar() {
-        if(this.estado != estadoSolicitudes.EN_PROCESO){
+        if (this.estado != estadoSolicitudes.EN_PROCESO) {
             throw new IllegalStateException("No se puede cerrar una solititud que no esté en proceso\n");
         }
         this.estado = estadoSolicitudes.CERRADA;
     }
 
-    public void siguienteEstado(){
+    public void siguienteEstado() {
         this.estado = this.estado.siguiente();
     }
 
