@@ -1,15 +1,14 @@
 package com.mgcss.mgcss_track_7.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class Solicitud {
     public enum estadoSolicitudes {
         ABIERTA, EN_PROCESO, CERRADA;
@@ -31,6 +30,7 @@ public class Solicitud {
     private Tecnico tecnicoAsignado;
     private Date fechaCreacion;
     private Date fechaCierre = null;
+    private List<estadoSolicitudes> historico;
 
     // Quitamos setter para no permitir mutar estado fuera de los métodos\
     // que cumplan las reglas de negocio
@@ -43,6 +43,13 @@ public class Solicitud {
         this.descripcion = descripcion;
         this.tecnicoAsignado = tecnicoAsignado;
         this.fechaCreacion = new Date();
+        this.historico = new ArrayList<>();
+        historico.add(estado);
+    }
+
+    public Solicitud(){
+        this.historico = new ArrayList<>();
+        historico.add(estado);
     }
 
     public boolean asignarTecnico(Tecnico tecnico) {
@@ -68,13 +75,31 @@ public class Solicitud {
         // Desasignamos tecnico
         asignarTecnico(null);
         this.estado = estadoSolicitudes.CERRADA;
+        actualizaHistorico();
     }
 
     public void siguienteEstado() {
-        if(this.estado.siguiente() == estadoSolicitudes.CERRADA)
-            cerrar();   // para manejar el tecnico asignado 
-        else
-            this.estado = this.estado.siguiente(); 
+        if (this.estado.siguiente() == estadoSolicitudes.CERRADA)
+            cerrar(); // para manejar el tecnico asignado
+        else {
+            this.estado = this.estado.siguiente();
+            actualizaHistorico();
+        }
+    }
+
+    public void reabrir(Tecnico tecnico) {
+        if (estado == estadoSolicitudes.CERRADA) {
+            if (!asignarTecnico(tecnico)) {
+                throw new IllegalArgumentException(
+                        "El técnico proporcionado no está disponible (inactivo o ya se encuentra trabajando).\n");
+            }
+            estado = estadoSolicitudes.EN_PROCESO;
+            actualizaHistorico();
+        }
+    }
+
+    public void actualizaHistorico() {
+        historico.add(estado);
     }
 
 }

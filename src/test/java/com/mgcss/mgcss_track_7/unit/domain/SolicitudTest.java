@@ -13,8 +13,8 @@ import com.mgcss.mgcss_track_7.domain.Solicitud;
 class SolicitudTest {
 
     @Test
-    void cerrarSolicitud() {        
-        // flujo correcto 
+    void cerrarSolicitud() {
+        // flujo correcto
         Solicitud solicitud2 = new Solicitud();
         assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud2.getEstado());
         solicitud2.siguienteEstado();
@@ -88,6 +88,64 @@ class SolicitudTest {
         Cliente cliente = new Cliente();
         Solicitud solicitud = new Solicitud(1l, cliente, "Descripcion", tecnicoActivo);
         assertEquals(true, solicitud.asignarTecnico(null));
+    }
+
+    @Test
+    void testReabrirSolicitud() {
+        Tecnico tecnicoActivo = new Tecnico(1L, "Juan", "Electricista");
+        Cliente cliente = new Cliente();
+        Solicitud solicitud = new Solicitud(1l, cliente, "Descripcion", tecnicoActivo);
+
+        solicitud.siguienteEstado();
+        solicitud.siguienteEstado();
+
+        // Solicitud cerrada, reabrimos
+        solicitud.reabrir(tecnicoActivo);
+        assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getEstado());
+
+    }
+
+    @Test
+    void testReabrirSolicitudExcepcion() {
+        Tecnico tecnicoActivo = new Tecnico(1L, "Juan", "Electricista");
+        Cliente cliente = new Cliente();
+        Solicitud solicitud = new Solicitud(1l, cliente, "Descripcion", tecnicoActivo);
+
+        solicitud.siguienteEstado();
+        solicitud.siguienteEstado();
+
+        tecnicoActivo.setActivo(false);
+
+        // Solicitud cerrada, reabrimos (debe fallar porque el técnico está inactivo)
+        assertThrows(IllegalArgumentException.class, () -> solicitud.reabrir(tecnicoActivo));
+    }
+
+    @Test
+    void testReabrirSolicitudNoCerrada() {
+        Tecnico tecnicoActivo = new Tecnico(1L, "Juan", "Electricista");
+        Cliente cliente = new Cliente();
+        Solicitud solicitud = new Solicitud(1l, cliente, "Descripcion", tecnicoActivo);
+        solicitud.reabrir(tecnicoActivo);
+
+        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud.getEstado());
+    }
+
+    @Test
+    void testHistoricoEstados() {
+        Tecnico tecnicoActivo = new Tecnico(1L, "Juan", "Electricista");
+        Cliente cliente = new Cliente();
+        Solicitud solicitud = new Solicitud(1l, cliente, "Descripcion", tecnicoActivo);
+
+        solicitud.siguienteEstado();
+        solicitud.siguienteEstado();
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud.getEstado().siguiente());
+        solicitud.reabrir(tecnicoActivo);
+
+        assertEquals(4, solicitud.getHistorico().size());
+        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud.getHistorico().get(0));
+        assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getHistorico().get(1));
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud.getHistorico().get(2));
+        assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getHistorico().get(3));
     }
 
 }
