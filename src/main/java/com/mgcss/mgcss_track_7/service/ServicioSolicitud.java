@@ -2,6 +2,7 @@ package com.mgcss.mgcss_track_7.service;
 
 import java.util.Optional;
 
+import com.mgcss.mgcss_track_7.domain.Cliente;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
 import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudRepositorio;
@@ -28,8 +29,8 @@ public class ServicioSolicitud {
         return solicitudRepositorio.save(solicitud);
     }
 
-    public Solicitud crearSolicitud(Long id, String descripcion) {
-        Solicitud solicitud = new Solicitud(id, descripcion, Solicitud.estadoSolicitudes.ABIERTA);
+    public Solicitud crearSolicitud(Long id, String descripcion, Cliente cliente) {
+        Solicitud solicitud = new Solicitud(id, cliente, descripcion, null);
         return solicitudRepositorio.save(solicitud);
     }
 
@@ -56,7 +57,7 @@ public class ServicioSolicitud {
             solicitud.siguienteEstado();
             if(solicitud.getEstado() == Solicitud.estadoSolicitudes.CERRADA){
                 solicitud.getTecnicoAsignado().setTrabajando(false);
-                solicitud.setTecnicoAsignado(null);
+                solicitud.asignarTecnico(null);
             }
             return solicitudRepositorio.save(solicitud);
 

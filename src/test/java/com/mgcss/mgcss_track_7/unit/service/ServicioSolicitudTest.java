@@ -15,9 +15,9 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import com.mgcss.mgcss_track_7.domain.Cliente;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
-import com.mgcss.mgcss_track_7.domain.Solicitud.estadoSolicitudes;
 import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudRepositorio;
 import com.mgcss.mgcss_track_7.service.ServicioSolicitud;
 
@@ -63,7 +63,7 @@ class ServicioSolicitudTest {
 
         when(repositorio.save(Mockito.any(Solicitud.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Solicitud resultado = servicio.crearSolicitud(15L, "Error de red");
+        Solicitud resultado = servicio.crearSolicitud(15L, "Error de red", new Cliente());
 
         assertEquals(15L, resultado.getId());
         assertEquals("Error de red", resultado.getDescripcion());
@@ -76,9 +76,8 @@ class ServicioSolicitudTest {
         SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
         ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
 
-        Solicitud solicitud = new Solicitud(21L, "", estadoSolicitudes.ABIERTA);
-        
-        
+        Solicitud solicitud = new Solicitud(2L, new Cliente(), "", null);
+
         when(repositorio.findById(21L)).thenReturn(Optional.of(solicitud));
         when(repositorio.save(solicitud)).thenReturn(solicitud);
 
@@ -98,35 +97,34 @@ class ServicioSolicitudTest {
         when(repositorio.findById(99L)).thenReturn(Optional.empty());
 
         Solicitud resultadoNoExiste = servicio.cambiarEstado(99L);
-        
+
         assertNull(resultadoNoExiste);
         verify(repositorio).findById(99L);
         verify(repositorio, never()).save(Mockito.any(Solicitud.class));
     }
 
     @Test
-    void cambiarEstadoYEliminarTecnico(){
+    void cambiarEstadoYEliminarTecnico() {
         SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
         ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
         Tecnico tecnico = new Tecnico();
-        Solicitud solicitud = new Solicitud(21L,"", estadoSolicitudes.EN_PROCESO);
+        Solicitud solicitud = new Solicitud(21L, new Cliente(), "", null);
 
         tecnico.setActivo(true);
         tecnico.setTrabajando(false);
         solicitud.asignarTecnico(tecnico);
+        solicitud.siguienteEstado();
 
-        when(repositorio.findById(21L)).thenReturn(Optional.of(solicitud));
         when(repositorio.save(solicitud)).thenReturn(solicitud);
+        when(repositorio.findById(21L)).thenReturn(Optional.of(solicitud));
 
         Solicitud resultado = servicio.cambiarEstado(21L);
 
         assertNotNull(resultado);
         assertEquals(Solicitud.estadoSolicitudes.CERRADA, resultado.getEstado());
-        verify(repositorio).findById(21L);
         verify(repositorio).save(solicitud);
+        verify(repositorio).findById(21L);
     }
-
-
 
     @Test
     void asignarTecnicoYactualizarSolicitud() {
