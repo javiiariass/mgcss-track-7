@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import com.mgcss.mgcss_track_7.infraestrucure.persistence.JpaSolicitudRepositorio;
 import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudEntidad;
+import com.mgcss.mgcss_track_7.domain.Cliente;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
+import com.mgcss.mgcss_track_7.domain.Tecnico;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
@@ -36,7 +39,8 @@ class JpaSolicitudRepositorioTest {
     }
     @Test
     void getterAndSettersAll(){
-        SolicitudEntidad entidad = new SolicitudEntidad(2L, "Test description", Solicitud.estadoSolicitudes.ABIERTA);
+        Cliente cliente = new Cliente();
+        SolicitudEntidad entidad = new SolicitudEntidad(2L, cliente, "Test description", null);
         
         // Setters
         entidad.setId(1L);
@@ -48,4 +52,6 @@ class JpaSolicitudRepositorioTest {
         assertEquals("Test description", entidad.getDescripcion());
         assertEquals(Solicitud.estadoSolicitudes.ABIERTA, entidad.getEstado());
     }
+
+    
 }
