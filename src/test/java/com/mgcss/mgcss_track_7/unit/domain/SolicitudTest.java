@@ -148,4 +148,123 @@ class SolicitudTest {
         assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getHistorico().get(3));
     }
 
+    @Test
+    void testConstructorInicializaFechasCierreConClientePremium() {
+        Tecnico tecnico = new Tecnico(1L, "Ana", "Redes");
+        Cliente clientePremium = new Cliente();
+        clientePremium.setTipo(Cliente.tipoCliente.PREMIUM);
+
+        Date antes = new Date();
+        Solicitud solicitud = new Solicitud(10L, clientePremium, "Fallo premium", tecnico);
+
+        assertEquals(24 * Solicitud.DIA_EN_MILISEGUNDOS, solicitud.getTiempoResolucionDias());
+        // fechaCierre debe estar entre (antes + plazo) y (despues + plazo)
+        long plazo = solicitud.getTiempoResolucionDias();
+        assertEquals(true, !solicitud.getFechaCierre().before(new Date(antes.getTime() + plazo)));
+        assertEquals(1, solicitud.getHistorico().size());
+        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud.getHistorico().get(0));
+    }
+
+    @Test
+    void testConstructorInicializaFechasCierreConClienteEstandar() {
+        Tecnico tecnico = new Tecnico(2L, "Luis", "Hardware");
+        Cliente clienteEstandar = new Cliente();
+        // tipoCliente distinto de PREMIUM -> 48 dias
+
+        Solicitud solicitud = new Solicitud(1L, clienteEstandar, "Fallo estandar", tecnico);
+
+        assertEquals(48 * Solicitud.DIA_EN_MILISEGUNDOS, solicitud.getTiempoResolucionDias());
+        assertEquals(1, solicitud.getHistorico().size());
+    }
+
+    @Test
+    void siguienteEstadoTransicionesCompletas() {
+        Solicitud solicitud = new Solicitud();
+
+        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitud.getEstado());
+
+        solicitud.siguienteEstado(); // ABIERTA -> EN_PROCESO
+        assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getEstado());
+
+        solicitud.siguienteEstado(); // EN_PROCESO -> CERRADA (via cerrar())
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud.getEstado());
+    }
+
+    @Test
+    void siguienteEstadoActualizaHistorico() {
+        Solicitud solicitud = new Solicitud();
+        // historico inicial: [ABIERTA]
+        assertEquals(1, solicitud.getHistorico().size());
+
+        solicitud.siguienteEstado(); // -> EN_PROCESO
+        assertEquals(2, solicitud.getHistorico().size());
+        assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getHistorico().get(1));
+
+        solicitud.siguienteEstado(); // -> CERRADA
+        assertEquals(3, solicitud.getHistorico().size());
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud.getHistorico().get(2));
+    }
+
+    @Test
+    void asignarTecnico_TecnicoYaEstabaTrabajando() {
+        Solicitud solicitud = new Solicitud();
+        Tecnico tecnico = new Tecnico();
+        tecnico.setActivo(true);
+        tecnico.setTrabajando(true); // ya ocupado
+
+        assertEquals(false, solicitud.asignarTecnico(tecnico));
+    }
+
+    @Test
+    void cerrarLiberaTecnicoAsignado() {
+        Tecnico tecnico = new Tecnico(3L, "Pedro", "Sistemas");
+        tecnico.setActivo(true);
+        tecnico.setTrabajando(false);
+
+        Solicitud solicitud = new Solicitud();
+        solicitud.asignarTecnico(tecnico);
+        solicitud.siguienteEstado(); // -> EN_PROCESO
+
+        assertEquals(true, tecnico.isTrabajando());
+
+        solicitud.cerrar();
+
+        assertEquals(false, tecnico.isTrabajando());
+        assertEquals(null, solicitud.getTecnicoAsignado());
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud.getEstado());
+    }
+
+    @Test
+    void testReabrirActualizaFechasYHistorico() {
+        Tecnico tecnico = new Tecnico(4L, "Marta", "Redes");
+        Cliente cliente = new Cliente();
+        Solicitud solicitud = new Solicitud(20L, cliente, "Corte de red", tecnico);
+
+        solicitud.siguienteEstado(); // -> EN_PROCESO
+        solicitud.siguienteEstado(); // -> CERRADA
+
+        Tecnico tecnicoNuevo = new Tecnico(5L, "Sergio", "Redes");
+        tecnicoNuevo.setActivo(true);
+        tecnicoNuevo.setTrabajando(false);
+
+        Date antesReapertura = new Date();
+        solicitud.reabrir(tecnicoNuevo);
+        Date despuesReapertura = new Date();
+
+        assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getEstado());
+        assertEquals(tecnicoNuevo, solicitud.getTecnicoAsignado());
+
+        // fechaReapertura debe estar en el rango de la llamada
+        assertEquals(false, solicitud.getFechaReapertura().before(antesReapertura));
+        assertEquals(false, solicitud.getFechaReapertura().after(despuesReapertura));
+
+        // nueva fechaCierre = fechaReapertura + tiempoResolucionDias
+        long nuevoCierre = solicitud.getFechaReapertura().getTime() + solicitud.getTiempoResolucionDias();
+        assertEquals(nuevoCierre, solicitud.getFechaCierre().getTime());
+
+        // historico: ABIERTA, EN_PROCESO, CERRADA, EN_PROCESO
+        assertEquals(4, solicitud.getHistorico().size());
+        assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, solicitud.getHistorico().get(3));
+    }
+
 }

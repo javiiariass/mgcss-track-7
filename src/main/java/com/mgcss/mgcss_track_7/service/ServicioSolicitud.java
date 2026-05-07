@@ -60,4 +60,30 @@ public class ServicioSolicitud {
 
     }
 
+    public Solicitud cerrarSolicitud(Long idSolicitud) {
+
+        Optional<Solicitud> solicitudOpt = solicitudRepositorio.findById(idSolicitud);
+        if (solicitudOpt.isEmpty()) {
+            throw new IllegalArgumentException("Solicitud no encontrada con id: " + idSolicitud);
+        }
+
+        Solicitud solicitud = solicitudOpt.get();
+        solicitud.cerrar();
+        return solicitudRepositorio.save(solicitud);
+
+    }
+
+    public Solicitud reabrirSolicitud(Long idSolicitud, Tecnico tecnico) {
+
+        Optional<Solicitud> solicitudOpt = solicitudRepositorio.findById(idSolicitud);
+        if (solicitudOpt.isEmpty()) {
+            throw new IllegalArgumentException("Solicitud no encontrada con id: " + idSolicitud);
+        }
+
+        Solicitud solicitud = solicitudOpt.get();
+        solicitud.reabrir(tecnico);
+        return solicitudRepositorio.save(solicitud);
+
+    }
+
 }
