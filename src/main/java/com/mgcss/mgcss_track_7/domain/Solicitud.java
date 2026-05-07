@@ -30,7 +30,7 @@ public class Solicitud {
     private Tecnico tecnicoAsignado;
     private Date fechaCreacion;
     private Date fechaCierre = null;
-    private long tiempoResolucion; //dias
+    private long tiempoResolucionDias; 
 
     // Quitamos setter para no permitir mutar estado fuera de los métodos\
     // que cumplan las reglas de negocio
@@ -43,10 +43,11 @@ public class Solicitud {
         this.descripcion = descripcion;
         this.tecnicoAsignado = tecnicoAsignado;
         this.fechaCreacion = new Date();
+        
          if(this.cliente.getTipo() == Cliente.tipoCliente.PREMIUM){
-            this.tiempoResolucion = 24;
+            this.tiempoResolucionDias = 24;
         } else {
-            this.tiempoResolucion = 48;
+            this.tiempoResolucionDias = 48;
         }
     }
 
