@@ -1,24 +1,23 @@
 package com.mgcss.mgcss_track_7.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class Solicitud {
     public enum estadoSolicitudes {
         ABIERTA, EN_PROCESO, CERRADA;
 
         public estadoSolicitudes siguiente() {
             estadoSolicitudes[] vals = values();
-            if ((this.ordinal() + 1) == vals.length)
+            if ((this.ordinal() + 1) == vals.length) {
                 return CERRADA;
-            else          
+            } else
                 return vals[(this.ordinal() + 1)];
         }
     }
@@ -27,14 +26,16 @@ public class Solicitud {
 
     private Cliente cliente;
     private String descripcion;
+    @Setter(AccessLevel.NONE)
     private Tecnico tecnicoAsignado;
     private Date fechaCreacion;
     private Date fechaCierre = null;
     private long tiempoResolucionDias; 
+    private List<estadoSolicitudes> historico;
 
     // Quitamos setter para no permitir mutar estado fuera de los métodos\
     // que cumplan las reglas de negocio
-    @Setter(AccessLevel.NONE) 
+    @Setter(AccessLevel.NONE)
     private estadoSolicitudes estado = estadoSolicitudes.ABIERTA;
 
     public Solicitud(Long id, Cliente cliente, String descripcion, Tecnico tecnicoAsignado) {
@@ -49,18 +50,24 @@ public class Solicitud {
         } else {
             this.tiempoResolucionDias = 48;
         }
+        this.historico = new ArrayList<>();
+        historico.add(estado);
     }
 
-    public Solicitud(Long id, String descripcion, estadoSolicitudes estado) {
-        this.id = id;
-        this.descripcion = descripcion;
-        this.estado = estado;
+    public Solicitud(){
+        this.historico = new ArrayList<>();
+        historico.add(estado);
     }
 
     public boolean asignarTecnico(Tecnico tecnico) {
         boolean asignado = false;
-
-        if (tecnico.isActivo() && !tecnico.isTrabajando() && tecnicoAsignado == null) {
+        if (tecnico == null) {
+            if (tecnicoAsignado != null) {
+                tecnicoAsignado.setTrabajando(false);
+            }
+            this.tecnicoAsignado = null;
+            asignado = true;
+        } else if (tecnico.isActivo() && !tecnico.isTrabajando() && tecnicoAsignado == null) {
             this.tecnicoAsignado = tecnico;
             tecnico.setTrabajando(true);
             asignado = true;
@@ -69,14 +76,37 @@ public class Solicitud {
     }
 
     public void cerrar() {
-        if(this.estado != estadoSolicitudes.EN_PROCESO){
+        if (this.estado != estadoSolicitudes.EN_PROCESO) {
             throw new IllegalStateException("No se puede cerrar una solititud que no esté en proceso\n");
         }
+        // Desasignamos tecnico
+        asignarTecnico(null);
         this.estado = estadoSolicitudes.CERRADA;
+        actualizaHistorico();
     }
 
-    public void siguienteEstado(){
-        this.estado = this.estado.siguiente();
+    public void siguienteEstado() {
+        if (this.estado.siguiente() == estadoSolicitudes.CERRADA)
+            cerrar(); // para manejar el tecnico asignado
+        else {
+            this.estado = this.estado.siguiente();
+            actualizaHistorico();
+        }
+    }
+
+    public void reabrir(Tecnico tecnico) {
+        if (estado == estadoSolicitudes.CERRADA) {
+            if (!asignarTecnico(tecnico)) {
+                throw new IllegalArgumentException(
+                        "El técnico proporcionado no está disponible (inactivo o ya se encuentra trabajando).\n");
+            }
+            estado = estadoSolicitudes.EN_PROCESO;
+            actualizaHistorico();
+        }
+    }
+
+    public void actualizaHistorico() {
+        historico.add(estado);
     }
 
 }

@@ -3,9 +3,14 @@ package com.mgcss.mgcss_track_7.integration;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
+
+import com.mgcss.mgcss_track_7.infraestrucure.persistence.ClienteEntidad;
 import com.mgcss.mgcss_track_7.infraestrucure.persistence.JpaSolicitudRepositorio;
 import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudEntidad;
+
 import com.mgcss.mgcss_track_7.domain.Solicitud;
+
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
@@ -36,7 +41,8 @@ class JpaSolicitudRepositorioTest {
     }
     @Test
     void getterAndSettersAll(){
-        SolicitudEntidad entidad = new SolicitudEntidad(2L, "Test description", Solicitud.estadoSolicitudes.ABIERTA);
+        ClienteEntidad cliente = new ClienteEntidad();
+        SolicitudEntidad entidad = new SolicitudEntidad(2L, cliente, "Test description", null);
         
         // Setters
         entidad.setId(1L);
@@ -48,4 +54,16 @@ class JpaSolicitudRepositorioTest {
         assertEquals("Test description", entidad.getDescripcion());
         assertEquals(Solicitud.estadoSolicitudes.ABIERTA, entidad.getEstado());
     }
+
+    @Test
+    void comprobarHistoriocoEstados(){
+        SolicitudEntidad entidad = new SolicitudEntidad(1l, new ClienteEntidad(), "Test description", null);
+        SolicitudEntidad solicitudBD = solicitudRepositorio.save(entidad);
+        Optional <SolicitudEntidad> solicitudEncontrada = solicitudRepositorio.findById(solicitudBD.getId());
+        assertTrue(solicitudEncontrada.isPresent());
+        assertEquals(1, solicitudEncontrada.get().getHistorico().size());
+        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, solicitudEncontrada.get().getHistorico().get(0));
+    }
+
+    
 }

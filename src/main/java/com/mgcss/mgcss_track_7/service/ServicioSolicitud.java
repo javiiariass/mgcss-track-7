@@ -2,9 +2,9 @@ package com.mgcss.mgcss_track_7.service;
 
 import java.util.Optional;
 
+import com.mgcss.mgcss_track_7.domain.Cliente;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
-import com.mgcss.mgcss_track_7.domain.Solicitud.estadoSolicitudes;
 import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudRepositorio;
 
 import java.util.List;
@@ -29,8 +29,8 @@ public class ServicioSolicitud {
         return solicitudRepositorio.save(solicitud);
     }
 
-    public Solicitud crearSolicitud(Long id, String descripcion) {
-        Solicitud solicitud = new Solicitud(id, descripcion, Solicitud.estadoSolicitudes.ABIERTA);
+    public Solicitud crearSolicitud(Long id, String descripcion, Cliente cliente) {
+        Solicitud solicitud = new Solicitud(id, cliente, descripcion, null);
         return solicitudRepositorio.save(solicitud);
     }
 
@@ -52,13 +52,7 @@ public class ServicioSolicitud {
         Optional<Solicitud> solicitudOpt = solicitudRepositorio.findById(idSolicitud);
         if (solicitudOpt.isPresent()) {
             Solicitud solicitud = solicitudOpt.get();
-
-            // Si cerrada, quitamos tecnico
             solicitud.siguienteEstado();
-            if(solicitud.getEstado() == Solicitud.estadoSolicitudes.CERRADA){
-                solicitud.getTecnicoAsignado().setTrabajando(false);
-                solicitud.setTecnicoAsignado(null);
-            }
             return solicitudRepositorio.save(solicitud);
 
         }
