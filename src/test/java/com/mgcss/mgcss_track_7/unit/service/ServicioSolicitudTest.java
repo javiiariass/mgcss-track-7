@@ -72,6 +72,23 @@ class ServicioSolicitudTest {
     }
 
     @Test
+    void crearSolicitudPremiumYverificarPlazo24Dias() {
+        SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
+
+        Cliente clientePremium = new Cliente("Ana", "ana@mail.com", Cliente.tipoCliente.PREMIUM);
+
+        when(repositorio.save(Mockito.any(Solicitud.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Solicitud resultado = servicio.crearSolicitud(20L, "Incidencia crítica", clientePremium);
+
+        assertEquals(20L, resultado.getId());
+        assertEquals(Solicitud.estadoSolicitudes.ABIERTA, resultado.getEstado());
+        assertEquals(24 * Solicitud.DIA_EN_MILISEGUNDOS, resultado.getTiempoResolucionDias());
+        verify(repositorio).save(Mockito.any(Solicitud.class));
+    }
+
+    @Test
     void cambiarEstadoYactualizarSolicitudCuandoExiste() {
         SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
         ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
@@ -158,6 +175,92 @@ class ServicioSolicitudTest {
         when(repositorio.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class, () -> servicio.asignarTecnico(99L, tecnico));
+
+        verify(repositorio).findById(99L);
+        verify(repositorio, never()).save(Mockito.any(Solicitud.class));
+    }
+
+    @Test
+    void cerrarSolicitudYactualizarCuandoExiste() {
+        SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
+
+        Tecnico tecnico = new Tecnico();
+        tecnico.setActivo(true);
+        tecnico.setTrabajando(false);
+
+        Solicitud solicitud = new Solicitud(5L, new Cliente(), "Fallo en servidor", null);
+        solicitud.asignarTecnico(tecnico);
+        solicitud.siguienteEstado(); // ABIERTA -> EN_PROCESO
+
+        when(repositorio.findById(5L)).thenReturn(Optional.of(solicitud));
+        when(repositorio.save(solicitud)).thenReturn(solicitud);
+
+        Solicitud resultado = servicio.cerrarSolicitud(5L);
+
+        assertNotNull(resultado);
+        assertEquals(Solicitud.estadoSolicitudes.CERRADA, resultado.getEstado());
+        assertNull(resultado.getTecnicoAsignado());
+        verify(repositorio).findById(5L);
+        verify(repositorio).save(solicitud);
+    }
+
+    @Test
+    void cerrarSolicitudYlanzarExcepcionCuandoNoExiste() {
+        SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
+
+        when(repositorio.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> servicio.cerrarSolicitud(99L));
+
+        verify(repositorio).findById(99L);
+        verify(repositorio, never()).save(Mockito.any(Solicitud.class));
+    }
+
+    @Test
+    void reabrirSolicitudYactualizarCuandoExiste() {
+        SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
+
+        Tecnico tecnico = new Tecnico();
+        tecnico.setActivo(true);
+        tecnico.setTrabajando(false);
+
+        Solicitud solicitud = new Solicitud(8L, new Cliente(), "Caída de red", null);
+        // Llevamos la solicitud a CERRADA
+        solicitud.asignarTecnico(tecnico);
+        solicitud.siguienteEstado(); // -> EN_PROCESO
+        solicitud.cerrar();          // -> CERRADA
+
+        Tecnico tecnicoNuevo = new Tecnico();
+        tecnicoNuevo.setActivo(true);
+        tecnicoNuevo.setTrabajando(false);
+
+        when(repositorio.findById(8L)).thenReturn(Optional.of(solicitud));
+        when(repositorio.save(solicitud)).thenReturn(solicitud);
+
+        Solicitud resultado = servicio.reabrirSolicitud(8L, tecnicoNuevo);
+
+        assertNotNull(resultado);
+        assertEquals(Solicitud.estadoSolicitudes.EN_PROCESO, resultado.getEstado());
+        assertEquals(tecnicoNuevo, resultado.getTecnicoAsignado());
+        assertNotNull(resultado.getFechaReapertura());
+        verify(repositorio).findById(8L);
+        verify(repositorio).save(solicitud);
+    }
+
+    @Test
+    void reabrirSolicitudYlanzarExcepcionCuandoNoExiste() {
+        SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
+
+        Tecnico tecnico = new Tecnico();
+        tecnico.setActivo(true);
+
+        when(repositorio.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> servicio.reabrirSolicitud(99L, tecnico));
 
         verify(repositorio).findById(99L);
         verify(repositorio, never()).save(Mockito.any(Solicitud.class));

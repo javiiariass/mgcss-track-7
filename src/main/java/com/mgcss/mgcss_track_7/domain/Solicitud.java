@@ -29,8 +29,10 @@ public class Solicitud {
     @Setter(AccessLevel.NONE)
     private Tecnico tecnicoAsignado;
     private Date fechaCreacion;
-    private Date fechaCierre = null;
+    private Date fechaCierre;
+    private Date fechaReapertura;
     private long tiempoResolucionDias; 
+    public static final Long DIA_EN_MILISEGUNDOS = 24 * 60 * 60 * 1000L;
     private List<estadoSolicitudes> historico;
 
     // Quitamos setter para no permitir mutar estado fuera de los métodos\
@@ -46,12 +48,13 @@ public class Solicitud {
         this.fechaCreacion = new Date();
         
          if(this.cliente.getTipo() == Cliente.tipoCliente.PREMIUM){
-            this.tiempoResolucionDias = 24;
-        } else {
-            this.tiempoResolucionDias = 48;
+            this.tiempoResolucionDias = 24 * DIA_EN_MILISEGUNDOS; //24 dias
+        } else  {
+            this.tiempoResolucionDias = 48 * DIA_EN_MILISEGUNDOS;//48 dias
         }
         this.historico = new ArrayList<>();
         historico.add(estado);
+        this.fechaCierre = new Date(this.fechaCreacion.getTime() + this.tiempoResolucionDias);
     }
 
     public Solicitud(){
@@ -102,6 +105,9 @@ public class Solicitud {
             }
             estado = estadoSolicitudes.EN_PROCESO;
             actualizaHistorico();
+            this.fechaReapertura = new Date();
+            this.fechaCierre = new Date(this.fechaReapertura.getTime() + this.tiempoResolucionDias);
+
         }
     }
 

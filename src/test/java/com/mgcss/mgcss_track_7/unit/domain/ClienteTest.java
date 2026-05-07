@@ -15,7 +15,7 @@ class ClienteTest {
 		assertNull(cliente.getId());
 		assertNull(cliente.getNombre());
 		assertNull(cliente.getEmail());
-		assertNull(cliente.getTipo());
+		assertEquals(Cliente.tipoCliente.STANDARD, cliente.getTipo());
 	}
 
 	@Test

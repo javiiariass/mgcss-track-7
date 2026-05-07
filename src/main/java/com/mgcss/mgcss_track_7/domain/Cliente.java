@@ -1,12 +1,11 @@
 package com.mgcss.mgcss_track_7.domain;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
+
 public class Cliente{
     public enum tipoCliente {
         STANDARD, PREMIUM
@@ -21,5 +20,8 @@ public class Cliente{
         this.nombre = nombre;
         this.email = email;
         this.tipo = tipo;
+    }
+    public Cliente() {
+        this.tipo = tipoCliente.STANDARD;
     }
 }
