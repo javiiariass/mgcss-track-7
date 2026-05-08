@@ -18,7 +18,7 @@ import org.mockito.Mockito;
 import com.mgcss.mgcss_track_7.domain.Cliente;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudRepositorio;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.SolicitudRepositorio;
 import com.mgcss.mgcss_track_7.service.ServicioSolicitud;
 
 class ServicioSolicitudTest {

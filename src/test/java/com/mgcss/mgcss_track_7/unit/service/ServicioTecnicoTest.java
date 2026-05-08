@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mgcss.mgcss_track_7.domain.Tecnico;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.TecnicoRepositorio;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.TecnicoRepositorio;
 import com.mgcss.mgcss_track_7.service.ServicioTecnico;
 
 class ServicioTecnicoTest {

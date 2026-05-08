@@ -4,12 +4,10 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.ClienteEntidad;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.JpaSolicitudRepositorio;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudEntidad;
-
 import com.mgcss.mgcss_track_7.domain.Solicitud;
-
+import com.mgcss.mgcss_track_7.infrastructure.persistence.ClienteEntidad;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.JpaSolicitudRepositorio;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.SolicitudEntidad;
 
 import static org.junit.jupiter.api.Assertions.*;
 
