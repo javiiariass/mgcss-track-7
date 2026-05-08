@@ -86,6 +86,7 @@ public class Solicitud {
         asignarTecnico(null);
         this.estado = estadoSolicitudes.CERRADA;
         actualizaHistorico();
+        fechaCierre = new Date();
     }
 
     public void siguienteEstado() {
