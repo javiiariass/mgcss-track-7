@@ -78,6 +78,15 @@ public class Solicitud {
         return asignado;
     }
 
+    public boolean asignarCliente(Cliente cliente) {
+        boolean asignado = false;
+        if (cliente != null) {
+            this.cliente = cliente;
+            asignado = true;
+        }
+        return asignado;
+    }
+
     public void cerrar() {
         if (this.estado != estadoSolicitudes.EN_PROCESO) {
             throw new IllegalStateException("No se puede cerrar una solititud que no esté en proceso\n");
