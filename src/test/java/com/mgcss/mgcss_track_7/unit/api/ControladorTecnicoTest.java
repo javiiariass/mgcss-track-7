@@ -75,4 +75,48 @@ class ControladorTecnicoTest {
                 .andExpect(jsonPath("$.id").value(3))
                 .andExpect(jsonPath("$.activo").value(true));
     }
+
+    @Test
+    void obtenerTecnicoPorIdNoEncontrado() throws Exception {
+        when(servicioTecnico.findById(99L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/tecnicos/99"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void establecerActivoNoEncontrado() throws Exception {
+        when(servicioTecnico.findById(99L)).thenReturn(Optional.empty());
+
+        org.junit.jupiter.api.Assertions.assertThrows(Exception.class, () ->
+                mockMvc.perform(put("/api/tecnicos/99/activo")
+                        .contentType("application/json")
+                        .content("true"))
+                        .andReturn());
+    }
+
+    @Test
+    void establecerTrabajando() throws Exception {
+        Tecnico tecnico = new Tecnico(4L, "Sara", "Redes");
+        tecnico.setTrabajando(true);
+        when(servicioTecnico.findById(4L)).thenReturn(Optional.of(tecnico));
+
+        mockMvc.perform(put("/api/tecnicos/4/trabajando")
+                .contentType("application/json")
+                .content("true"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(4))
+                .andExpect(jsonPath("$.trabajando").value(true));
+    }
+
+    @Test
+    void establecerTrabajandoNoEncontrado() throws Exception {
+        when(servicioTecnico.findById(99L)).thenReturn(Optional.empty());
+
+        org.junit.jupiter.api.Assertions.assertThrows(Exception.class, () ->
+                mockMvc.perform(put("/api/tecnicos/99/trabajando")
+                        .contentType("application/json")
+                        .content("true"))
+                        .andReturn());
+    }
 }

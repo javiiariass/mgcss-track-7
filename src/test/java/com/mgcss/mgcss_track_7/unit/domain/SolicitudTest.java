@@ -2,6 +2,7 @@ package com.mgcss.mgcss_track_7.unit.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 import java.util.Date;
@@ -203,6 +204,26 @@ class SolicitudTest {
         solicitud.siguienteEstado(); // -> CERRADA
         assertEquals(3, solicitud.getHistorico().size());
         assertEquals(Solicitud.estadoSolicitudes.CERRADA, solicitud.getHistorico().get(2));
+    }
+
+    @Test
+    void testSettersFaltantes() {
+        Solicitud solicitud = new Solicitud();
+        Date fecha = new Date();
+
+        solicitud.setFechaReapertura(fecha);
+        solicitud.setTiempoResolucionDias(48L);
+        solicitud.setHistorico(new java.util.ArrayList<>());
+
+        assertEquals(fecha, solicitud.getFechaReapertura());
+        assertEquals(48L, solicitud.getTiempoResolucionDias());
+        assertNotNull(solicitud.getHistorico());
+    }
+
+    @Test
+    void asignarClienteNullRetornaFalso() {
+        Solicitud solicitud = new Solicitud();
+        assertEquals(false, solicitud.asignarCliente(null));
     }
 
     @Test

@@ -265,4 +265,66 @@ class ServicioSolicitudTest {
         verify(repositorio).findById(99L);
         verify(repositorio, never()).save(Mockito.any(Solicitud.class));
     }
+
+    @Test
+    void findAllYretornarListaSolicitudes() {
+        SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
+
+        java.util.List<Solicitud> lista = java.util.List.of(new Solicitud(), new Solicitud());
+        when(repositorio.findAll()).thenReturn(lista);
+
+        java.util.List<Solicitud> resultado = servicio.findAll();
+
+        assertEquals(2, resultado.size());
+        verify(repositorio).findAll();
+    }
+
+    @Test
+    void asignarClienteYactualizarSolicitud() {
+        SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
+
+        Cliente cliente = new Cliente("Ana", "ana@mail.com", Cliente.tipoCliente.STANDARD);
+        Solicitud solicitud = new Solicitud();
+        solicitud.setId(1L);
+
+        when(repositorio.findById(1L)).thenReturn(Optional.of(solicitud));
+        when(repositorio.save(solicitud)).thenReturn(solicitud);
+
+        Solicitud resultado = servicio.asignarCliente(1L, cliente);
+
+        assertEquals(cliente, resultado.getCliente());
+        verify(repositorio).findById(1L);
+        verify(repositorio).save(solicitud);
+    }
+
+    @Test
+    void asignarClienteYlanzarExcepcionCuandoNoExiste() {
+        SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
+
+        when(repositorio.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class,
+                () -> servicio.asignarCliente(99L, new Cliente()));
+
+        verify(repositorio).findById(99L);
+        verify(repositorio, never()).save(Mockito.any(Solicitud.class));
+    }
+
+    @Test
+    void crearSolicitudSinClienteYdescripcionValida() {
+        SolicitudRepositorio repositorio = Mockito.mock(SolicitudRepositorio.class);
+        ServicioSolicitud servicio = new ServicioSolicitud(repositorio);
+
+        when(repositorio.save(Mockito.any(Solicitud.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        Solicitud resultado = servicio.crearSolicitudSinClienteYdescripcionValida("Error en servidor");
+
+        assertNotNull(resultado);
+        assertEquals("Error en servidor", resultado.getDescripcion());
+        assertNull(resultado.getCliente());
+        verify(repositorio).save(Mockito.any(Solicitud.class));
+    }
 }
