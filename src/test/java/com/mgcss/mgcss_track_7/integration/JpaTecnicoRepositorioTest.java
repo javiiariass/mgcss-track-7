@@ -23,7 +23,10 @@ class JpaTecnicoRepositorioTest {
 
     @Test
     void guardarEntidad(){
-        TecnicoEntidad nuevoTecnico = new TecnicoEntidad(1L,"jUAN",true,"Electricidad");
+        TecnicoEntidad nuevoTecnico = new TecnicoEntidad();
+        nuevoTecnico.setNombre("jUAN");
+        nuevoTecnico.setActivo(true);
+        nuevoTecnico.setEspecialidad("Electricidad");
         nuevoTecnico.setTrabajando(false);
 
         TecnicoEntidad tecnicoBD = tecnicoRepositorio.save(nuevoTecnico);

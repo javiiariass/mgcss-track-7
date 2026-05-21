@@ -47,10 +47,10 @@ public class Solicitud {
         this.tecnicoAsignado = tecnicoAsignado;
         this.fechaCreacion = new Date();
         
-         if(this.cliente.getTipo() == Cliente.tipoCliente.PREMIUM){
-            this.tiempoResolucionDias = 24 * DIA_EN_MILISEGUNDOS; //24 dias
-        } else  {
-            this.tiempoResolucionDias = 48 * DIA_EN_MILISEGUNDOS;//48 dias
+        if(this.cliente != null && this.cliente.getTipo() == Cliente.tipoCliente.PREMIUM){
+            this.tiempoResolucionDias = 24 * DIA_EN_MILISEGUNDOS;
+        } else {
+            this.tiempoResolucionDias = 48 * DIA_EN_MILISEGUNDOS;
         }
         this.historico = new ArrayList<>();
         historico.add(estado);

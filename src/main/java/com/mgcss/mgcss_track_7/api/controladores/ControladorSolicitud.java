@@ -14,9 +14,12 @@ import com.mgcss.mgcss_track_7.service.ServicioTecnico;
 
 import jakarta.validation.Valid;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +42,7 @@ public class ControladorSolicitud {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public SolicitudRespuestaDTO crearSolicitud(@Valid @RequestBody SolicitudPeticionDTO solicitudPeticionDTO) {
         Solicitud solicitud = servicioSolicitud
                 .crearSolicitudSinClienteYdescripcionValida(solicitudPeticionDTO.getDescripcion());
@@ -61,6 +65,18 @@ public class ControladorSolicitud {
         return servicioSolicitud.findAll().stream()
                 .map(SolicitudMapeo::toSolicitudRespuestaDTO)
                 .toList();
+    }
+
+    @PatchMapping("/{id}")
+    public SolicitudRespuestaDTO cambiarEstadoPatch(@PathVariable Long id) {
+        Optional<Solicitud> opt = servicioSolicitud.findById(id);
+        if (opt.isPresent()) {
+            Solicitud solicitud = opt.get();
+            solicitud.siguienteEstado();
+            servicioSolicitud.save(solicitud);
+            return SolicitudMapeo.toSolicitudRespuestaDTO(solicitud);
+        }
+        throw new IllegalArgumentException("Solicitud no encontrada con id: " + id);
     }
 
     @PutMapping("/{id}/estado")

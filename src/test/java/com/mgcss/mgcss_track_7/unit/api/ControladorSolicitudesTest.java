@@ -52,7 +52,7 @@ class ControladorSolicitudesTest {
                 .andExpect(status().isCreated());
         mockMvc.perform(post("/api/solicitudes")
                 .contentType("application/json").content(json))
-            .andExpect(status().isOk())
+            .andExpect(status().isCreated())
             .andExpect(jsonPath("$.id").value(1))
             .andExpect(jsonPath("$.descripcion").value("Descripción Generica"))
             .andExpect(jsonPath("$.estado").value("ABIERTA"));
@@ -72,7 +72,7 @@ class ControladorSolicitudesTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.descripcion").value("Descripción Generica"))
-                .andExpect(jsonPath("$.estado").value("EN_PROGRESO"));
+                .andExpect(jsonPath("$.estado").value("EN_PROCESO"));
     }
 
     
