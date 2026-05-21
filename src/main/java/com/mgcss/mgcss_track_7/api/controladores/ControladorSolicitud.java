@@ -8,9 +8,14 @@ import com.mgcss.mgcss_track_7.api.dto.SolicitudRespuestaDTO;
 import com.mgcss.mgcss_track_7.api.mapper.SolicitudMapeo;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
-
 import com.mgcss.mgcss_track_7.service.ServicioSolicitud;
 import com.mgcss.mgcss_track_7.service.ServicioTecnico;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.Valid;
 
@@ -27,6 +32,7 @@ import java.util.Optional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+@Tag(name = "Solicitudes", description = "Gestión de solicitudes de soporte técnico")
 @RestController
 @RequestMapping("/api/solicitudes")
 public class ControladorSolicitud {
@@ -38,6 +44,11 @@ public class ControladorSolicitud {
         this.servicioTecnico = servicioTecnico;
     }
 
+    @Operation(summary = "Crear una solicitud", description = "Crea una nueva solicitud de soporte con estado ABIERTA a partir de una descripción")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Solicitud creada correctamente"),
+        @ApiResponse(responseCode = "400", description = "Descripción inválida o vacía")
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SolicitudRespuestaDTO crearSolicitud(@Valid @RequestBody SolicitudPeticionDTO solicitudPeticionDTO) {
@@ -46,17 +57,23 @@ public class ControladorSolicitud {
         return SolicitudMapeo.toSolicitudRespuestaDTO(solicitud);
     }
 
+    @Operation(summary = "Obtener solicitud por ID", description = "Devuelve los datos de una solicitud a partir de su identificador")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Solicitud encontrada o null si no existe")
+    })
     @GetMapping("/{id}")
-    public SolicitudRespuestaDTO obtenerSolicitudPorId(@PathVariable Long id) {
+    public SolicitudRespuestaDTO obtenerSolicitudPorId(
+            @Parameter(description = "ID de la solicitud", example = "1") @PathVariable Long id) {
         Optional<Solicitud> solicitud = servicioSolicitud.findById(id);
         if (solicitud.isPresent()) {
             return SolicitudMapeo.toSolicitudRespuestaDTO(solicitud.get());
         } else {
-            return null; // O lanzar una excepción personalizada para indicar que la solicitud no fue
-                         // encontrada
+            return null;
         }
     }
 
+    @Operation(summary = "Obtener todas las solicitudes", description = "Devuelve la lista completa de solicitudes registradas en el sistema")
+    @ApiResponse(responseCode = "200", description = "Lista de solicitudes")
     @GetMapping
     public List<SolicitudRespuestaDTO> obtenerTodasLasSolicitudes() {
         return servicioSolicitud.findAll().stream()
@@ -64,8 +81,14 @@ public class ControladorSolicitud {
                 .toList();
     }
 
+    @Operation(summary = "Avanzar estado de una solicitud (PATCH)", description = "Avanza la solicitud al siguiente estado: ABIERTA → EN_PROCESO → CERRADA")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Estado actualizado correctamente"),
+        @ApiResponse(responseCode = "400", description = "Solicitud no encontrada")
+    })
     @PatchMapping("/{id}")
-    public SolicitudRespuestaDTO cambiarEstadoPatch(@PathVariable Long id) {
+    public SolicitudRespuestaDTO cambiarEstadoPatch(
+            @Parameter(description = "ID de la solicitud", example = "1") @PathVariable Long id) {
         Optional<Solicitud> opt = servicioSolicitud.findById(id);
         if (opt.isPresent()) {
             Solicitud solicitud = opt.get();
@@ -76,15 +99,25 @@ public class ControladorSolicitud {
         throw new IllegalArgumentException("Solicitud no encontrada con id: " + id);
     }
 
+    @Operation(summary = "Avanzar estado de una solicitud (PUT)", description = "Avanza la solicitud al siguiente estado usando el servicio de cambio de estado")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Estado actualizado correctamente")
+    })
     @PutMapping("/{id}/estado")
-    public SolicitudRespuestaDTO cambiarEstado(@PathVariable Long id) {
+    public SolicitudRespuestaDTO cambiarEstado(
+            @Parameter(description = "ID de la solicitud", example = "1") @PathVariable Long id) {
         Solicitud solicitudActualizada = servicioSolicitud.cambiarEstado(id);
         return SolicitudMapeo.toSolicitudRespuestaDTO(solicitudActualizada);
-
     }
 
+    @Operation(summary = "Reabrir una solicitud", description = "Reabre una solicitud CERRADA asignándola al técnico que tenía previamente")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Solicitud reabierta correctamente"),
+        @ApiResponse(responseCode = "400", description = "Solicitud no encontrada")
+    })
     @PutMapping("/{id}/reabrir")
-    public SolicitudRespuestaDTO reabrirSolicitud(@PathVariable Long id) {
+    public SolicitudRespuestaDTO reabrirSolicitud(
+            @Parameter(description = "ID de la solicitud", example = "1") @PathVariable Long id) {
         Optional<Solicitud> solicitud = servicioSolicitud.findById(id);
         if (solicitud.isPresent()) {
             Solicitud solicitudActualizada = servicioSolicitud.reabrirSolicitud(solicitud.get().getId(),
@@ -95,8 +128,15 @@ public class ControladorSolicitud {
         }
     }
 
+    @Operation(summary = "Asignar técnico a una solicitud", description = "Asigna un técnico activo y disponible a la solicitud indicada")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Técnico asignado correctamente"),
+        @ApiResponse(responseCode = "400", description = "Solicitud no encontrada")
+    })
     @PutMapping("/{id}/tecnico")
-    public SolicitudRespuestaDTO asignarTecnico(@PathVariable Long id, @RequestBody Long tecnicoId) {
+    public SolicitudRespuestaDTO asignarTecnico(
+            @Parameter(description = "ID de la solicitud", example = "1") @PathVariable Long id,
+            @Parameter(description = "ID del técnico a asignar", example = "2") @RequestBody Long tecnicoId) {
         Optional<Solicitud> solicitud = servicioSolicitud.findById(id);
         Optional<Tecnico> tecnico = servicioTecnico.findById(tecnicoId);
         if (solicitud.isPresent()) {
@@ -106,5 +146,4 @@ public class ControladorSolicitud {
             throw new IllegalArgumentException("Solicitud no encontrada con id: " + id);
         }
     }
-
 }
