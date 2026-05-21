@@ -80,7 +80,7 @@ class ControladorSolicitudesTest {
         Solicitud solicitud = new Solicitud(1L, null, "Descripción Generica", null);
         when(solicitudService.findById(1L)).thenReturn(java.util.Optional.of(solicitud));
 
-        mockMvc.perform(get("/api/solicitudes/1").param("id", "1"))
+        mockMvc.perform(get("/api/solicitudes/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.estado").value("ABIERTA"));
@@ -90,7 +90,7 @@ class ControladorSolicitudesTest {
     void obtenerSolicitudPorIdNoEncontrado() throws Exception {
         when(solicitudService.findById(99L)).thenReturn(java.util.Optional.empty());
 
-        mockMvc.perform(get("/api/solicitudes/99").param("id", "99"))
+        mockMvc.perform(get("/api/solicitudes/99"))
                 .andExpect(status().isOk());
     }
 

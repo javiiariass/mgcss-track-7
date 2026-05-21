@@ -1,7 +1,6 @@
 package com.mgcss.mgcss_track_7.unit.api;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -15,7 +14,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.mgcss.mgcss_track_7.api.controladores.ControladorCliente;
-import com.mgcss.mgcss_track_7.api.dto.ClientePeticionDTO;
 import com.mgcss.mgcss_track_7.domain.Cliente;
 import com.mgcss.mgcss_track_7.service.ServicioCliente;
 

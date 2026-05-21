@@ -13,7 +13,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.mgcss.mgcss_track_7.api.controladores.ControladorCliente;
-import com.mgcss.mgcss_track_7.domain.Cliente;
 import com.mgcss.mgcss_track_7.service.ServicioCliente;
 
 @WebMvcTest(ControladorCliente.class)

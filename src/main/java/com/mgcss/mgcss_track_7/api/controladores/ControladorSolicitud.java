@@ -8,7 +8,7 @@ import com.mgcss.mgcss_track_7.api.dto.SolicitudRespuestaDTO;
 import com.mgcss.mgcss_track_7.api.mapper.SolicitudMapeo;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudEntidad;
+
 import com.mgcss.mgcss_track_7.service.ServicioSolicitud;
 import com.mgcss.mgcss_track_7.service.ServicioTecnico;
 
@@ -24,11 +24,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/solicitudes")
@@ -50,7 +47,7 @@ public class ControladorSolicitud {
     }
 
     @GetMapping("/{id}")
-    public SolicitudRespuestaDTO obtenerSolicitudPorId(@RequestParam Long id) {
+    public SolicitudRespuestaDTO obtenerSolicitudPorId(@PathVariable Long id) {
         Optional<Solicitud> solicitud = servicioSolicitud.findById(id);
         if (solicitud.isPresent()) {
             return SolicitudMapeo.toSolicitudRespuestaDTO(solicitud.get());
