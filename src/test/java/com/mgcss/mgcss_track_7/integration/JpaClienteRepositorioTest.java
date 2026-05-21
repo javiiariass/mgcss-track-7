@@ -25,7 +25,6 @@ class JpaClienteRepositorioTest {
     @Test
     void guardarEntidad() {
         ClienteEntidad nuevoCliente = new ClienteEntidad();
-        nuevoCliente.setId(1L);
 
         ClienteEntidad clienteBD = clienteRepositorio.save(nuevoCliente);
 
