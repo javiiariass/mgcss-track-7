@@ -5,15 +5,16 @@ import java.util.Optional;
 import com.mgcss.mgcss_track_7.domain.Cliente;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
+import org.springframework.stereotype.Service;
 import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudRepositorio;
 
 import java.util.List;
 
+@Service
 public class ServicioSolicitud {
 
     public final SolicitudRepositorio solicitudRepositorio;
     List<Solicitud> solicitudes;
-    
 
     public ServicioSolicitud(SolicitudRepositorio solicitudRepositorio) {
         this.solicitudRepositorio = solicitudRepositorio;
@@ -23,6 +24,10 @@ public class ServicioSolicitud {
 
         return solicitudRepositorio.findById(id);
 
+    }
+
+    public List<Solicitud> findAll() {
+        return solicitudRepositorio.findAll();
     }
 
     public Solicitud save(Solicitud solicitud) {
@@ -43,6 +48,19 @@ public class ServicioSolicitud {
 
         Solicitud solicitud = solicitudOpt.get();
         solicitud.asignarTecnico(tecnico);
+        return solicitudRepositorio.save(solicitud);
+
+    }
+
+    public Solicitud asignarCliente(Long idSolicitud, Cliente cliente) {
+
+        Optional<Solicitud> solicitudOpt = solicitudRepositorio.findById(idSolicitud);
+        if (solicitudOpt.isEmpty()) {
+            throw new IllegalArgumentException("Solicitud no encontrada con id: " + idSolicitud);
+        }
+
+        Solicitud solicitud = solicitudOpt.get();
+        solicitud.asignarCliente(cliente);
         return solicitudRepositorio.save(solicitud);
 
     }
@@ -84,6 +102,11 @@ public class ServicioSolicitud {
         solicitud.reabrir(tecnico);
         return solicitudRepositorio.save(solicitud);
 
+    }
+
+    public Solicitud crearSolicitudSinClienteYdescripcionValida(String descripcion) {
+        Solicitud solicitud = new Solicitud(null, null, descripcion, null);
+        return solicitudRepositorio.save(solicitud);
     }
 
 }

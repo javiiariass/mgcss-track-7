@@ -1,6 +1,11 @@
 # mgcss-track-7
 Repositorio seguimiento proyecto Mantenimiento
 
+## Documentación
+- [Casos de uso](./docs/use-cases.md)
+- [Análisis de cambios](./docs/change-analysis.md)
+- [Notas de refactorización](./docs/refactor-notes.md)
+
 | Métrica | Estado |
 |---|---|
 | **Pipeline (CI/CD)** | [![CI Pipeline](https://github.com/javiiariass/mgcss-track-7/actions/workflows/ci.yml/badge.svg)](https://github.com/javiiariass/mgcss-track-7/actions/workflows/ci.yml) |

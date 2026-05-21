@@ -35,7 +35,6 @@ class JpaSolicitudRepositorioTest {
     @Test
     void guardarEntidad(){
         SolicitudEntidad nuevaSolicitud = new SolicitudEntidad();
-        nuevaSolicitud.setId(1L);
 
         SolicitudEntidad solicitudBD = solicitudRepositorio.save(nuevaSolicitud);
 
@@ -62,7 +61,7 @@ class JpaSolicitudRepositorioTest {
 
     @Test
     void comprobarHistoriocoEstados(){
-        SolicitudEntidad entidad = new SolicitudEntidad(1l, new ClienteEntidad(), "Test description", null);
+        SolicitudEntidad entidad = new SolicitudEntidad(null, new ClienteEntidad(), "Test description", null);
         SolicitudEntidad solicitudBD = solicitudRepositorio.save(entidad);
         Optional <SolicitudEntidad> solicitudEncontrada = solicitudRepositorio.findById(solicitudBD.getId());
         assertTrue(solicitudEncontrada.isPresent());
@@ -73,10 +72,10 @@ class JpaSolicitudRepositorioTest {
 
     @Test
     void guardarSolicitudConClientePremiumYverificarPlazo() {
-        ClienteEntidad clientePremium = new ClienteEntidad(10L, "Ana", "ana@mail.com", Cliente.tipoCliente.PREMIUM);
-        clienteRepositorio.save(clientePremium);
+        ClienteEntidad clientePremium = new ClienteEntidad(null, "Ana", "ana@mail.com", Cliente.tipoCliente.PREMIUM);
+        ClienteEntidad clientePremiumGuardado = clienteRepositorio.save(clientePremium);
 
-        SolicitudEntidad entidad = new SolicitudEntidad(10L, clientePremium, "Incidencia crítica", null);
+        SolicitudEntidad entidad = new SolicitudEntidad(null, clientePremiumGuardado, "Incidencia crítica", null);
         SolicitudEntidad guardada = solicitudRepositorio.save(entidad);
 
         Optional<SolicitudEntidad> encontrada = solicitudRepositorio.findById(guardada.getId());
@@ -88,10 +87,10 @@ class JpaSolicitudRepositorioTest {
 
     @Test
     void guardarSolicitudConClienteStandardYverificarPlazo() {
-        ClienteEntidad clienteStandard = new ClienteEntidad(11L, "Carlos", "carlos@mail.com", Cliente.tipoCliente.STANDARD);
-        clienteRepositorio.save(clienteStandard);
+        ClienteEntidad clienteStandard = new ClienteEntidad(null, "Carlos", "carlos@mail.com", Cliente.tipoCliente.STANDARD);
+        ClienteEntidad clienteStandardGuardado = clienteRepositorio.save(clienteStandard);
 
-        SolicitudEntidad entidad = new SolicitudEntidad(11L, clienteStandard, "Fallo de red", null);
+        SolicitudEntidad entidad = new SolicitudEntidad(null, clienteStandardGuardado, "Fallo de red", null);
         SolicitudEntidad guardada = solicitudRepositorio.save(entidad);
 
         Optional<SolicitudEntidad> encontrada = solicitudRepositorio.findById(guardada.getId());
