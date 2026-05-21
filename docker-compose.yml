@@ -16,7 +16,7 @@ services:
       retries: 10
 
   app:
-    build: .
+    image: adrianma13/mgcss-track-7:1.0.0 
     ports:
       - "8080:8080"
     environment:
