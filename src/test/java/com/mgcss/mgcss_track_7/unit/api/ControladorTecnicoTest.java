@@ -83,7 +83,7 @@ class ControladorTecnicoTest {
     }
 
     @Test
-    void establecerActivoNoEncontrado() throws Exception {
+    void establecerActivoNoEncontrado(){
         when(servicioTecnico.findById(99L)).thenReturn(Optional.empty());
 
         org.junit.jupiter.api.Assertions.assertThrows(Exception.class, () ->
@@ -108,7 +108,7 @@ class ControladorTecnicoTest {
     }
 
     @Test
-    void establecerTrabajandoNoEncontrado() throws Exception {
+    void establecerTrabajandoNoEncontrado() {
         when(servicioTecnico.findById(99L)).thenReturn(Optional.empty());
 
         org.junit.jupiter.api.Assertions.assertThrows(Exception.class, () ->

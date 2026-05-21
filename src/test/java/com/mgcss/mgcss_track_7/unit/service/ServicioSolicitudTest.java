@@ -306,8 +306,9 @@ class ServicioSolicitudTest {
 
         when(repositorio.findById(99L)).thenReturn(Optional.empty());
 
+        Cliente clienteVacio = new Cliente();
         assertThrows(IllegalArgumentException.class,
-                () -> servicio.asignarCliente(99L, new Cliente()));
+                () -> servicio.asignarCliente(99L, clienteVacio));
 
         verify(repositorio).findById(99L);
         verify(repositorio, never()).save(Mockito.any(Solicitud.class));

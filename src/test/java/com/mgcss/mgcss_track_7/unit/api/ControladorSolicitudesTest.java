@@ -131,7 +131,7 @@ class ControladorSolicitudesTest {
     }
 
     @Test
-    void reabrirSolicitudNoEncontrado() throws Exception {
+    void reabrirSolicitudNoEncontrado() {
         when(solicitudService.findById(99L)).thenReturn(java.util.Optional.empty());
 
         org.junit.jupiter.api.Assertions.assertThrows(Exception.class, () ->
@@ -140,7 +140,7 @@ class ControladorSolicitudesTest {
     }
 
     @Test
-    void cambiarEstadoPatchNoEncontrado() throws Exception {
+    void cambiarEstadoPatchNoEncontrado() {
         when(solicitudService.findById(99L)).thenReturn(java.util.Optional.empty());
 
         org.junit.jupiter.api.Assertions.assertThrows(Exception.class, () ->
@@ -149,7 +149,7 @@ class ControladorSolicitudesTest {
     }
 
     @Test
-    void asignarTecnicoNoEncontrado() throws Exception {
+    void asignarTecnicoNoEncontrado() {
         when(solicitudService.findById(99L)).thenReturn(java.util.Optional.empty());
 
         org.junit.jupiter.api.Assertions.assertThrows(Exception.class, () ->
