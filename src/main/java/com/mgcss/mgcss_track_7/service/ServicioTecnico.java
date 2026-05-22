@@ -3,7 +3,7 @@ package com.mgcss.mgcss_track_7.service;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.mgcss.mgcss_track_7.domain.Tecnico;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.TecnicoRepositorio;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.TecnicoRepositorio;
 
 import java.util.List;
 

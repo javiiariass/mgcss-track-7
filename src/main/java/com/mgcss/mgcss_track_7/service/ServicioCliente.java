@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.ClienteRepositorio;
 import com.mgcss.mgcss_track_7.domain.Cliente;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.ClienteRepositorio;
+
 import java.util.Optional;
 
 @Service

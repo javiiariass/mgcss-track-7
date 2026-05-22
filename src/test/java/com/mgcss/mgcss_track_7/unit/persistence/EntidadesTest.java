@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import com.mgcss.mgcss_track_7.domain.Cliente;
 import com.mgcss.mgcss_track_7.domain.Solicitud;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.ClienteEntidad;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.SolicitudEntidad;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.TecnicoEntidad;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.ClienteEntidad;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.SolicitudEntidad;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.TecnicoEntidad;
 
 class EntidadesTest {
 
