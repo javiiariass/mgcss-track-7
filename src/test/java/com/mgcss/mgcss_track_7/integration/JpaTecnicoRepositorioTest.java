@@ -3,8 +3,10 @@ package com.mgcss.mgcss_track_7.integration;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.JpaTecnicoRepositorio;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.TecnicoEntidad;
+
+import com.mgcss.mgcss_track_7.infrastructure.persistence.JpaTecnicoRepositorio;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.TecnicoEntidad;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;

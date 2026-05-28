@@ -1,4 +1,4 @@
-package com.mgcss.mgcss_track_7.infraestrucure.persistence;
+package com.mgcss.mgcss_track_7.infrastructure.persistence;
 import java.util.Optional;
 
 import com.mgcss.mgcss_track_7.domain.Cliente;

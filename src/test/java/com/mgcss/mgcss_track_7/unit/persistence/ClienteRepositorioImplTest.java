@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mgcss.mgcss_track_7.domain.Cliente;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.ClienteEntidad;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.ClienteRepositorioImpl;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.JpaClienteRepositorio;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.ClienteEntidad;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.ClienteRepositorioImpl;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.JpaClienteRepositorio;
 
 class ClienteRepositorioImplTest {
 

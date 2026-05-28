@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mgcss.mgcss_track_7.domain.Tecnico;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.JpaTecnicoRepositorio;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.TecnicoEntidad;
-import com.mgcss.mgcss_track_7.infraestrucure.persistence.TecnicoRepositorioImpl;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.JpaTecnicoRepositorio;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.TecnicoEntidad;
+import com.mgcss.mgcss_track_7.infrastructure.persistence.TecnicoRepositorioImpl;
 
 class TecnicoRepositorioImplTest {
 
