@@ -178,15 +178,29 @@ La aplicación expone su API en `http://localhost:8080` y la documentación Swag
 
 La forma más rápida, no requiere tener Java ni Maven instalados:
 
-```bash
-docker run -p 8080:8080 adrianma13/mgcss-track-7:latest
-```
-
+#### app + postgree
 Para un entorno más cercano a producción (app + base de datos PostgreSQL), desde la raíz
 del proyecto:
 
 ```bash
 docker compose up
+```
+
+#### Sin necesidad de descargar el repo
+##### Traemos la imagen más reciente
+
+```bash
+docker pull adrianma13/mgcss-track-7
+```
+
+##### levantamos imagen
+
+>[!warning]
+> si usas máquina arm:
+> añadir `--platform linux/amd64` 
+
+```bash
+docker run -p 8080:8080 adrianma13/mgcss-track-7
 ```
 
 ### Opción B — Artefacto `.jar` de la Release
@@ -209,7 +223,6 @@ java -jar target/*.jar
 ### Comprobación
 
 - API y Swagger: `http://localhost:8080/swagger-ui.html`
-- Consola H2 (solo en desarrollo): `http://localhost:8080/h2-console`
 
 ---
 
