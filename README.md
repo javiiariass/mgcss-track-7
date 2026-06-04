@@ -6,13 +6,13 @@ obtenidas y el estado de la deuda técnica.
 
 ---
 
-## Documentación
+### Documentos de seguimiento
 - [Casos de uso](./docs/use-cases.md)
 - [Análisis de cambios](./docs/change-analysis.md)
 - [Notas de refactorización](./docs/refactor-notes.md)
 - [Notas de release y versionado](./docs/release-notes.md)
 
-### útiles
+### Útiles
 - [Guía Cheatsheet tags](./docs/cheatsheet-tag.md)
 - [Guía Conventional commits](./docs/conventional-commits.md)
 
