@@ -39,7 +39,7 @@ Primera version estable del sistema de gestion de solicitudes.
 
 **Justificacion PATCH:** Cambio de infraestructura/build sin modificacion funcional ni de API.
 
-### v1.0.2 - (Proxima release planificada)
+### v1.0.2 - Correcciones menores
 
 **Tipo de cambio:** PATCH
 

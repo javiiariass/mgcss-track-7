@@ -35,13 +35,22 @@ POST /api/clientes
   "tipo": "GOLD"
 }
 ```
-**Response esperado:** `400` / `500` (Dependiendo del GlobalExceptionHandler)
+**Response esperado:** `500 Internal Server Error`
+
+El controlador convierte el tipo con `tipoCliente.valueOf("GOLD")`, que lanza una
+`IllegalArgumentException` porque `GOLD` no es un valor válido (`STANDARD`/`PREMIUM`).
+Como el proyecto **no** define un manejador global de excepciones
+(`@RestControllerAdvice`), Spring Boot devuelve su respuesta de error por defecto con
+código `500`. Por defecto el cuerpo no incluye el mensaje de la excepción:
 ```json
 {
-  "error": "IllegalArgumentException",
-  "message": "No enum constant com.mgcss.mgcss_track_7.domain.Cliente.tipoCliente.GOLD"
+  "timestamp": "2026-06-04T10:00:00.000+00:00",
+  "status": 500,
+  "error": "Internal Server Error",
+  "path": "/api/clientes"
 }
 ```
+Causa interna (visible en los logs): `No enum constant com.mgcss.mgcss_track_7.domain.Cliente.tipoCliente.GOLD`.
 
 ## Caso 3 - Crear una Solicitud de Soporte
 **Precondición:** Sistema preparado, no se requiere configuración previa.
@@ -65,7 +74,7 @@ POST /api/solicitudes
 ```
 
 ## Caso 4 - Asignar Técnico Disponible a una Solicitud
-**Precondición:** Solicitud con ID `1` creada. Técnico con ID `1` creado, con estado activo y no trabajando.
+**Precondición:** Solicitud con ID `1` creada. Técnico con ID `1` y nombre `Juan Pérez` creado, con estado activo y no trabajando.
 **Request:**
 ```http
 PUT /api/solicitudes/1/tecnico
@@ -74,12 +83,14 @@ PUT /api/solicitudes/1/tecnico
 1
 ```
 **Response esperado:** `200`
+
+> Nota: el campo `tecnicoAsignado` de la respuesta contiene el **nombre** del técnico (lo que devuelve el mapper), no su id.
 ```json
 {
   "id": 1,
   "descripcion": "Fallo en la conexión del servidor principal",
   "estado": "ABIERTA",
-  "tecnicoAsignado": "1"
+  "tecnicoAsignado": "Juan Pérez"
 }
 ```
 
@@ -96,7 +107,7 @@ PATCH /api/solicitudes/1
   "id": 1,
   "descripcion": "Fallo en la conexión del servidor principal",
   "estado": "EN_PROCESO",
-  "tecnicoAsignado": "1"
+  "tecnicoAsignado": "Juan Pérez"
 }
 ```
 
@@ -107,10 +118,17 @@ PATCH /api/solicitudes/1
 PUT /api/solicitudes/2/reabrir
 ```
 *(Sin body)*
-**Response esperado:** `400` / `500`
+**Response esperado:** `500 Internal Server Error`
+
+El método `reabrir()` del dominio lanza una `IllegalArgumentException` cuando el técnico
+no está disponible. Al no existir un manejador global de excepciones, Spring Boot devuelve
+su respuesta de error por defecto con código `500`:
 ```json
 {
-  "error": "IllegalArgumentException",
-  "message": "El técnico proporcionado no está disponible (inactivo o ya se encuentra trabajando)."
+  "timestamp": "2026-06-04T10:00:00.000+00:00",
+  "status": 500,
+  "error": "Internal Server Error",
+  "path": "/api/solicitudes/2/reabrir"
 }
 ```
+Causa interna (visible en los logs): `El técnico proporcionado no está disponible (inactivo o ya se encuentra trabajando).`

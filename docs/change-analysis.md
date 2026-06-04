@@ -15,17 +15,17 @@
 - Ninguno de nuestros test debería romperse.
 
 ### 4. ¿Qué parte del modelo debe extenderse?
-- Se debe extender el modelo con una nueva entidad (`HistorialEstado`).
-- Esta nueva entidad debe reflejar las propiedades: `fechaDeCambio`, `estadoAnterior`, `estadoNuevo` y una relación hacia la `Solicitud`.
-- La entidad `Solicitud` necesita incorporar una colección (ej. `List<HistorialEstado>`) para almacenar el registro de sus propios cambios.
+- La entidad `Solicitud` incorpora una colección `List<estadoSolicitudes> historico` que guarda la secuencia de estados por los que pasa la solicitud.
+- Cada vez que cambia el estado (`siguienteEstado()`, `cerrar()`, `reabrir()`) se llama a `actualizaHistorico()`, que añade el nuevo estado a la lista.
+- Se valoró crear una entidad separada `HistorialEstado` con propiedades como `fechaDeCambio`, `estadoAnterior` y `estadoNuevo`, pero finalmente se descartó (ver "Notas de cambios").
 
 ### 5. ¿Qué impacto tiene en persistencia?
-- **Base de datos:** Será necesaria la creación de una tabla adicional asociada (ej. `historial_estados`) con una clave foránea (Foreign Key) apuntando a `Solicitud`.
-- **Mapeo ORM/JPA:** Se deberá añadir una relación `@OneToMany` en la entidad `Solicitud` para persistir los historiales.
-- **Transaccionalidad:** Los cambios de estado requerirán un guardado que involucre tanto actualizar la `Solicitud` como insertar en la nueva tabla de historial.
+- **Base de datos:** El histórico se persiste en una tabla secundaria `solicitud_historial` con una clave foránea (`solicitud_id`) hacia la solicitud, generada automáticamente por JPA.
+- **Mapeo ORM/JPA:** En `SolicitudEntidad` el histórico se mapea con `@ElementCollection` + `@CollectionTable(name = "solicitud_historial")`, almacenando cada estado como cadena (`@Enumerated(EnumType.STRING)`). No es una entidad propia, sino una colección de valores.
+- **Transaccionalidad:** Al guardar la solicitud, JPA persiste también su colección de estados en la misma operación.
 
 
 # Notas de cambios
 
 ## Justificación estructura histórico
-Hemos usado un arrayList() porque, dada la complejidad del proyecto y la duración del mismo, preferimos regirnos por el principio KISS. 
+Hemos usado una `List<estadoSolicitudes>` (un `ArrayList` en el dominio, persistido con `@ElementCollection`) en lugar de una entidad separada `HistorialEstado`. Dada la complejidad y la duración del proyecto, preferimos regirnos por el principio **KISS**: la lista cubre el requisito de mantener la trazabilidad de los estados sin añadir una tabla, relaciones `@OneToMany` ni mapeos adicionales que aumentarían la deuda técnica. Como contrapartida, no guardamos la fecha exacta de cada transición ni el estado anterior/nuevo por separado; si en el futuro se necesitara ese detalle, se migraría a la entidad `HistorialEstado`.
